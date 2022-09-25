@@ -22,10 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\FBQ.Salud-AccessData\FBQ.Salud-AccessData.csproj" />
     <ProjectReference Include="..\FBQ.Salud-Application\FBQ.Salud-Application.csproj" />
   </ItemGroup>
