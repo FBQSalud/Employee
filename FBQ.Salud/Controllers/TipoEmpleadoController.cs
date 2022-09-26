@@ -41,7 +41,7 @@ namespace FBQ.Salud_Presentation.Controllers
             try
             {
                 var tipoEmpleado = _tipoEmpleadoServices.GetTipoEmpleadoById(id);
-                var tipoEmpleadoMapped = _mapper.Map<EmpleadoDTO>(tipoEmpleado);
+                var tipoEmpleadoMapped = _mapper.Map<TipoEmpleadoDTO>(tipoEmpleado);
                 if (tipoEmpleado == null)
                 {
                     return NotFound("Tipo de Empleado Inexistente");
