@@ -20,5 +20,6 @@ namespace FBQ.Salud_AccessData.Commands
         public virtual DbSet<TipoEmpleado> TipoEmpleados { get; set; }  
         public virtual DbSet<HorarioTrabajo> HorariosTrabajo { get; set; }
         public virtual DbSet<Especialidad> Especialidades { get; set; }
+        public virtual DbSet<Habitacion> Habitaciones { get; set; }
     }
 }
