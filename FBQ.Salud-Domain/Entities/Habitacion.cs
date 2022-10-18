@@ -23,7 +23,7 @@ namespace FBQ.Salud_Domain.Entities
         public int piso { get; set; }
         [Required]
         [Display(Name = "Fecha")]
-        public DateTime fecha { get; set; }
+        public DateTime Fecha { get; set; }
        
     }
 }
