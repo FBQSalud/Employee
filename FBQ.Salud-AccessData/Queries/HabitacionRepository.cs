@@ -24,6 +24,11 @@ namespace FBQ.Salud_AccessData.Queries
             return _context.Habitaciones.FirstOrDefault(habita => habita.HabitacionId == id);
         }
 
+        public Habitacion GetHabitacionByNumero(int numero)
+        {
+            return _context.Habitaciones.FirstOrDefault(habita => habita.Numero == numero);
+        }
+
         public void Update(Habitacion habitacion)
         {
             _context.Update(habitacion);

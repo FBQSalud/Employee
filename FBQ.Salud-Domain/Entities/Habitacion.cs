@@ -7,10 +7,8 @@ namespace FBQ.Salud_Domain.Entities
     {
         [Key]
         public int HabitacionId { get; set; }
-        [Required]
         [Display(Name = "PacienteId")]
         public int PacienteId { get; set; }
-        [Required]
         [Display(Name = "EnfermeraId")]
         public int EnfermeraId { get; set; }
         [Display(Name = "Estado")]
@@ -21,7 +19,6 @@ namespace FBQ.Salud_Domain.Entities
         [Required]
         [Display(Name = "Número")]
         public int Numero { get; set; }
-        [Required]
         [Display(Name = "Fecha")]
         public DateTime Fecha { get; set; }
 

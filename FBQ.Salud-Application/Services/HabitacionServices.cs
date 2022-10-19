@@ -13,6 +13,7 @@ namespace FBQ.Salud_Application.Services
         List<HabitacionDTO> GetAll();
         Habitacion GetHabitacionById(int id);
         void Update(Habitacion habitacion);
+        Habitacion GetHabitacionByNumero(int numero);
     }
     public class HabitacionServices : IHabitacionServices
     {
@@ -42,6 +43,11 @@ namespace FBQ.Salud_Application.Services
         public void Update(Habitacion habitacion)
         {
              _habitacionRepository.Update(habitacion);
+        }
+
+        public Habitacion GetHabitacionByNumero(int numero)
+        {
+            return _habitacionRepository.GetHabitacionByNumero(numero);
         }
     }
 }
