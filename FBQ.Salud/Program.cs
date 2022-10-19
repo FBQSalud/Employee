@@ -24,6 +24,8 @@ builder.Services.AddTransient<IMedicoServices, MedicoServices>();
 builder.Services.AddTransient<IEnfermeraRepository, EnfermeraRepository>();
 builder.Services.AddTransient<IEnfermeraServices, EnfermeraServices>();
 builder.Services.AddTransient<IEmpleadoRepository, EmpleadoRepository>();
+builder.Services.AddTransient<IHabitacionRepository, HabitacionRepository>();
+builder.Services.AddTransient<IHabitacionServices, HabitacionServices>();
 builder.Services.AddTransient<IEmpleadoServices, EmpleadoServices>();
 builder.Services.AddTransient<ITipoEmpleadoRepository, TipoEmpleadoRepository>();
 builder.Services.AddTransient<ITipoEmpleadoServices, TipoEmpleadoServices>();
