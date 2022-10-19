@@ -3,16 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FBQ.Salud_Domain.Entities
 {
-    public class Habitacion
+    public class HabitacionDTO
     {
+
         [Key]
         public int HabitacionId { get; set; }
-        [Required]
-        [Display(Name = "PacienteId")]
-        public int PacienteId { get; set; }
-        [Required]
-        [Display(Name = "EnfermeraId")]
-        public int EnfermeraId { get; set; }
         [Display(Name = "Estado")]
         public bool Estado { get; set; }
         [Required]
@@ -24,6 +19,6 @@ namespace FBQ.Salud_Domain.Entities
         [Required]
         [Display(Name = "Fecha")]
         public DateTime Fecha { get; set; }
-
+       
     }
 }
