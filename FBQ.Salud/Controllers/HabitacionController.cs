@@ -62,109 +62,162 @@ namespace FBQ.Salud_Presentation.Controllers
             }
         }
 
-       
+
         /// <summary>
         ///  Endpoint dedicado a asignar enfermeras a  una habitación.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="EnfermeraId"></param>
-        [HttpPut("{id}/{EnfermeraId}")]
+        [HttpPut("Asignar/{Numero}/EnfermeraId")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorDTO), StatusCodes.Status409Conflict)]
-        [ProducesResponseType(typeof(ErrorDTO), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ErrorDTO), StatusCodes.Status400BadRequest)]
-        public IActionResult Asignar(int id, int EnfermeraId) // debería ser con numero de habitación para hacerlo más dinamico..
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
+        public IActionResult Asignar(int Numero, int EnfermeraId) 
         {
             try
             {
-                var Response = new ErrorDTO();
-                var HabitacionFind = _habitacionServices.GetHabitacionById(id);
+                var Response = new ResponseDTO();
+                var HabitacionFind = _habitacionServices.GetHabitacionByNumero(Numero);
 
                 var EnfermeraFind = _enfermeraServices.GetEnfermeraById(EnfermeraId);
                 if (EnfermeraFind == null)
                 {
-                    Response = new ErrorDTO { message = "La Enfermera a asignar no existe.", statuscode = "404" };
+                    Response = new ResponseDTO { message = "La enfermera a asignar no existe.", statuscode = "404" };
                     return NotFound(Response);
                 }
                 if (HabitacionFind == null)
                 {
-                    Response = new ErrorDTO { message = "La Habitación no existe.", statuscode = "404" };
+                    Response = new ResponseDTO { message = "La habitación no existe.", statuscode = "404" };
                     return NotFound(Response);
                 }
                 if (HabitacionFind.EnfermeraId != null)
                 {
-                     Response = new ErrorDTO { message = "La Habitación ya tiene asignada una enfermera.", statuscode = "409" };
+                     Response = new ResponseDTO { message = "La habitación ya tiene asignada una enfermera.", statuscode = "409" };
                     return Conflict(Response);
                 }
                 HabitacionFind.EnfermeraId = EnfermeraId;
                 _habitacionServices.Update(HabitacionFind);
-                 Response = new ErrorDTO { message = "Enfermera a sido asignada a Habitación " + HabitacionFind.Numero + ", Piso " + HabitacionFind.Piso + " correctamente.", statuscode = "200" };
-                return Ok();
+                 Response = new ResponseDTO { message = "Enfermera a sido asignada a habitación " + HabitacionFind.Numero + ", piso " + HabitacionFind.Piso + " correctamente.", statuscode = "200" };
+                return Ok(Response);
             }
             catch (Exception e)
             {
-                var ErrorResponse = new ErrorDTO { message = "se ha ingresado los datos en un formato incorrecto, Excepcion :"+ e.Message, statuscode = "400" };
+                var ErrorResponse = new ResponseDTO { message = "Se ha ingresado los datos en un formato incorrecto, Excepcion :"+ e.Message, statuscode = "400" };
+                return BadRequest(ErrorResponse);
+            }
+        }
+
+        /// <summary>
+        ///  Endpoint dedicado a Desasignar enfermeras a  una habitación.
+        /// </summary>
+        [HttpPut("Desasignar/Numero")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
+        public IActionResult Desasignar(int Numero)
+        {
+            try
+            {
+                var Response = new ResponseDTO();
+                var habitacion = _habitacionServices.GetHabitacionByNumero(Numero);
+
+               
+                if (habitacion == null)
+                {
+                    Response = new ResponseDTO { message = "La habitación no existe.", statuscode = "404" };
+                    return NotFound(Response);
+                }
+                if (habitacion.EnfermeraId == 0)
+                {
+                    Response = new ResponseDTO { message = "La habitación No tiene asignada una enfermera.", statuscode = "409" };
+                    return Conflict(Response);
+                }
+                habitacion.EnfermeraId = 0;
+                _habitacionServices.Update(habitacion);
+                Response = new ResponseDTO { message = "Se ha desasignado a la enfermera de la habitación " + habitacion.Numero + ", piso " + habitacion.Piso + " correctamente.", statuscode = "200" };
+                return Ok(Response);
+            }
+            catch (Exception e)
+            {
+                var ErrorResponse = new ResponseDTO { message = "Se ha ingresado los datos en un formato incorrecto, Excepcion :" + e.Message, statuscode = "400" };
                 return BadRequest(ErrorResponse);
             }
         }
         /// <summary>
         ///  Endpoint dedicado a ocupar una habitación con un paciente.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="pacienteId"></param>
-        [HttpPut("{id}/{pacienteId}")]
+        [HttpPut("Ocupar/{Numero}/pacienteId")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorDTO), StatusCodes.Status409Conflict)]
-        [ProducesResponseType(typeof(ErrorDTO), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ErrorDTO), StatusCodes.Status400BadRequest)]
-        public IActionResult Ocupar(int id, int pacienteId) // Debería ser con número de habitación, Id de paciente, debe chequear si estado = true
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
+        public IActionResult Ocupar(int Numero, int pacienteId) 
         {
             try
             {
-                var Response = new ErrorDTO();
-                var HabitacionFind = _habitacionServices.GetHabitacionById(id);
+                var Response = new ResponseDTO();
+                var Habitacion = _habitacionServices.GetHabitacionByNumero(Numero);
 
                 // Comprobación de pacienteId conexión a otro microservicio perhaps.
-                if (HabitacionFind == null)
+                if (Habitacion == null)
                 {
-                    Response = new ErrorDTO { message = "La Habitación no existe.", statuscode = "404" };
+                    Response = new ResponseDTO { message = "La habitación no existe.", statuscode = "404" };
                     return NotFound(Response);
                 }
-                if (HabitacionFind.Estado == true)
+                if (Habitacion.Estado == true)
                 {
-                    Response = new ErrorDTO { message = "La Habitación ya se encuentra ocupada.", statuscode = "409" };
+                    Response = new ResponseDTO { message = "La habitación ya se encuentra ocupada.", statuscode = "409" };
                     return Conflict(Response);
                 }
-                HabitacionFind.PacienteId = pacienteId;
-                _habitacionServices.Update(HabitacionFind);
-                Response = new ErrorDTO { message = "Paciente Ingresado a Habitación " + HabitacionFind.Numero + ", Piso " + HabitacionFind.Piso + " correctamente.", statuscode = "200" };
+                Habitacion.PacienteId = pacienteId;
+                Habitacion.Estado = false;
+                _habitacionServices.Update(Habitacion);
+                Response = new ResponseDTO { message = "Paciente ingresado a habitación " + Numero + ", piso " + Habitacion.Piso + " correctamente.", statuscode = "200" };
                 return Ok();
             }
             catch (Exception e)
             {
-                var ErrorResponse = new ErrorDTO { message = "se ha ingresado los datos en un formato incorrecto, Excepcion :" + e.Message, statuscode = "400" };
+                var ErrorResponse = new ResponseDTO { message = "Se ha ingresado los datos en un formato incorrecto, Excepcion :" + e.Message, statuscode = "400" };
                 return BadRequest(ErrorResponse);
             }
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Desocupar(int id) // Debería ser con número de habitación, debe chequear si estado = true
+        /// <summary>
+        ///  Endpoint dedicado a Desocupar una habitación de pacientes.
+        /// </summary>
+        [HttpPut("Desocupar/numero")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
+        public IActionResult Desocupar(int Numero) 
         {
             try
             {
-                var habitacion = _habitacionServices.GetHabitacionById(id);
+                var Response = new ResponseDTO();
+                var habitacion = _habitacionServices.GetHabitacionByNumero(Numero);
+                
 
                 if (habitacion == null)
                 {
-                    return NotFound("Habitación Inexistente");
+                    Response = new ResponseDTO { message = "Habitación Inexistente", statuscode = "404" };
+                    return NotFound(Response);
                 }
-
+                if(habitacion.Estado == false)
+                {
+                    Response = new ResponseDTO { message = "La habitación está vacía.", statuscode = "409" };
+                    return Conflict(Response);
+                }
+                habitacion.PacienteId = 0;
+                habitacion.Estado = true;
                 _habitacionServices.Update(habitacion);
-                return Ok("Habitación Desocupada. ");
+                Response = new ResponseDTO { message = " habitación " + Numero + ", piso " + habitacion.Piso + " desocupada correctamente.", statuscode = "200" };
+                return Ok(Response);
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                var ErrorResponse = new ResponseDTO { message = "Se ha ingresado los datos en un formato incorrecto, Excepcion :" + e.Message, statuscode = "400" };
+                return BadRequest(ErrorResponse);
             }
         }
     }

@@ -8,5 +8,6 @@ namespace FBQ.Salud_Domain.Commands
         List<Habitacion> GetAll();
         Habitacion GetHabitacionById(int id);
         void Update(Habitacion habitacion);
+        Habitacion GetHabitacionByNumero(int numero);
     }
 }
