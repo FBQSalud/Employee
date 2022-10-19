@@ -53,7 +53,7 @@ namespace FBQ.Salud_Presentation.Controllers
         /// <summary>
         ///  Endpoint dedicado a asignar enfermeras a  una habitación.
         /// </summary>
-        [HttpPut("asignar/{numero}/enfermeraId")]
+        [HttpPatch("asignar/{numero}/enfermeraId")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
@@ -96,7 +96,7 @@ namespace FBQ.Salud_Presentation.Controllers
         /// <summary>
         ///  Endpoint dedicado a Desasignar enfermeras a  una habitación.
         /// </summary>
-        [HttpPut("desasignar/numero")]
+        [HttpPatch("desasignar/numero")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
@@ -133,7 +133,7 @@ namespace FBQ.Salud_Presentation.Controllers
         /// <summary>
         ///  Endpoint dedicado a ocupar una habitación con un paciente.
         /// </summary>
-        [HttpPut("ocupar/{numero}/pacienteId")]
+        [HttpPatch("ocupar/{numero}/pacienteId")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
@@ -172,7 +172,7 @@ namespace FBQ.Salud_Presentation.Controllers
         /// <summary>
         ///  Endpoint dedicado a Desocupar una habitación de pacientes.
         /// </summary>
-        [HttpPut("Desocupar/numero")]
+        [HttpPatch("Desocupar/numero")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
