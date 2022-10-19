@@ -2,7 +2,9 @@
 using FBQ.Salud_Application.Services;
 using FBQ.Salud_Domain.Dtos;
 using FBQ.Salud_Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
 
 namespace FBQ.Salud_Presentation.Controllers
 {
@@ -11,13 +13,19 @@ namespace FBQ.Salud_Presentation.Controllers
     public class HabitacionController : ControllerBase
     {
         IHabitacionServices _habitacionServices;
+        IEnfermeraServices _enfermeraServices;
+        IMedicoServices _medicoServices; 
         private readonly IMapper _mapper;
 
         public HabitacionController(IHabitacionServices habitacionServices, 
-            IMapper mapper)
+            IMapper mapper,
+            IEnfermeraServices enfermeraServices,
+            IMedicoServices medicoServices)
         {
             _habitacionServices = habitacionServices;
             _mapper = mapper;
+            _enfermeraServices = enfermeraServices;
+            _medicoServices = medicoServices;
         }
 
         [HttpGet]
@@ -55,32 +63,87 @@ namespace FBQ.Salud_Presentation.Controllers
         }
 
        
-
-        [HttpPut("{id}")]
-        public IActionResult Ocupar(int id, HabitacionDTO habitacion) // Debería ser con número de habitación, debe chequear si estado = true
+        /// <summary>
+        ///  Endpoint dedicado a asignar enfermeras a  una habitación.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="EnfermeraId"></param>
+        [HttpPut("{id}/{EnfermeraId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorDTO), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ErrorDTO), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorDTO), StatusCodes.Status400BadRequest)]
+        public IActionResult Asignar(int id, int EnfermeraId) // debería ser con numero de habitación para hacerlo más dinamico..
         {
             try
             {
-                if (habitacion == null)
+                var Response = new ErrorDTO();
+                var HabitacionFind = _habitacionServices.GetHabitacionById(id);
+
+                var EnfermeraFind = _enfermeraServices.GetEnfermeraById(EnfermeraId);
+                if (EnfermeraFind == null)
                 {
-                    return BadRequest("Completar todos los campos para realizar la actualizacion");
+                    Response = new ErrorDTO { message = "La Enfermera a asignar no existe.", statuscode = "404" };
+                    return NotFound(Response);
                 }
-
-                var empleadoUpdate = _habitacionServices.GetHabitacionById(id);
-
-                if (empleadoUpdate == null)
+                if (HabitacionFind == null)
                 {
-                    return NotFound("Empleado Inexistente");
+                    Response = new ErrorDTO { message = "La Habitación no existe.", statuscode = "404" };
+                    return NotFound(Response);
                 }
-
-                _mapper.Map(habitacion, empleadoUpdate);
-                _habitacionServices.Update(empleadoUpdate);
-
-                return Ok("Empleado actualizado");
+                if (HabitacionFind.EnfermeraId != null)
+                {
+                     Response = new ErrorDTO { message = "La Habitación ya tiene asignada una enfermera.", statuscode = "409" };
+                    return Conflict(Response);
+                }
+                HabitacionFind.EnfermeraId = EnfermeraId;
+                _habitacionServices.Update(HabitacionFind);
+                 Response = new ErrorDTO { message = "Enfermera a sido asignada a Habitación " + HabitacionFind.Numero + ", Piso " + HabitacionFind.Piso + " correctamente.", statuscode = "200" };
+                return Ok();
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                var ErrorResponse = new ErrorDTO { message = "se ha ingresado los datos en un formato incorrecto, Excepcion :"+ e.Message, statuscode = "400" };
+                return BadRequest(ErrorResponse);
+            }
+        }
+        /// <summary>
+        ///  Endpoint dedicado a ocupar una habitación con un paciente.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="pacienteId"></param>
+        [HttpPut("{id}/{pacienteId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorDTO), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ErrorDTO), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorDTO), StatusCodes.Status400BadRequest)]
+        public IActionResult Ocupar(int id, int pacienteId) // Debería ser con número de habitación, Id de paciente, debe chequear si estado = true
+        {
+            try
+            {
+                var Response = new ErrorDTO();
+                var HabitacionFind = _habitacionServices.GetHabitacionById(id);
+
+                // Comprobación de pacienteId conexión a otro microservicio perhaps.
+                if (HabitacionFind == null)
+                {
+                    Response = new ErrorDTO { message = "La Habitación no existe.", statuscode = "404" };
+                    return NotFound(Response);
+                }
+                if (HabitacionFind.Estado == true)
+                {
+                    Response = new ErrorDTO { message = "La Habitación ya se encuentra ocupada.", statuscode = "409" };
+                    return Conflict(Response);
+                }
+                HabitacionFind.PacienteId = pacienteId;
+                _habitacionServices.Update(HabitacionFind);
+                Response = new ErrorDTO { message = "Paciente Ingresado a Habitación " + HabitacionFind.Numero + ", Piso " + HabitacionFind.Piso + " correctamente.", statuscode = "200" };
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                var ErrorResponse = new ErrorDTO { message = "se ha ingresado los datos en un formato incorrecto, Excepcion :" + e.Message, statuscode = "400" };
+                return BadRequest(ErrorResponse);
             }
         }
 

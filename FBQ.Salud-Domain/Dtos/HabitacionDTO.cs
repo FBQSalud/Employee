@@ -8,6 +8,11 @@ namespace FBQ.Salud_Domain.Entities
 
         [Key]
         public int HabitacionId { get; set; }
+        [Required]
+        [Display(Name = "PacienteId")]
+        public int pacienteId { get; set; }
+        [Display(Name = "EnfermeraId")]
+        public int enfermeraId { get; set; }
         [Display(Name = "Estado")]
         public bool Estado { get; set; }
         [Required]
