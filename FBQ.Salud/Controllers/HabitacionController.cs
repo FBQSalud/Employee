@@ -38,7 +38,9 @@ namespace FBQ.Salud_Presentation.Controllers
             try
             {
                 var Response = new ResponseDTO();
-                var Habitaciones = _habitacionServices.GetAll();          
+                var Habitaciones = _habitacionServices.GetAll();
+                var HabitacionesMapped = _mapper.Map<List<HabitacionResponseDTO>>(Habitaciones);
+
 
                 return Ok(Habitaciones);
             }

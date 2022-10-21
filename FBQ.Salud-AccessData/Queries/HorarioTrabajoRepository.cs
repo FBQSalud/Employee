@@ -16,12 +16,12 @@ namespace FBQ.Salud_AccessData.Queries
             
         public List<HorarioTrabajo> GetAll()
         {
-            return _context.HorariosTrabajo.ToList();
+            return _context.HorariosTrabajo.Where(HorarioTrabajo => HorarioTrabajo.Estado == true).ToList();
         }
 
         public HorarioTrabajo GetHorarioTrabajoById(int id)
         {
-            return _context.HorariosTrabajo.FirstOrDefault(horarioTrabajo => horarioTrabajo.HorarioId == id);
+            return _context.HorariosTrabajo.FirstOrDefault(horarioTrabajo => horarioTrabajo.HorarioId == id && horarioTrabajo.Estado == true);
         }
 
         public void Add(HorarioTrabajo horarioTrabajo)

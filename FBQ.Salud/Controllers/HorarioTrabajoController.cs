@@ -25,7 +25,7 @@ namespace FBQ.Salud_Presentation.Controllers
             try
             {
                 var horarioTrabajo = _horarioTrabajoServices.GetAll();
-                var horarioTrabajoMapped = _mapper.Map<List<HorarioTrabajoDTO>>(horarioTrabajo);
+                var horarioTrabajoMapped = _mapper.Map<List<HorarioTrabajoResponseDTO>>(horarioTrabajo);
 
                 return Ok(horarioTrabajoMapped);
             }
@@ -40,12 +40,12 @@ namespace FBQ.Salud_Presentation.Controllers
         {
             try
             {
-                var horarioTrabajo = _horarioTrabajoServices.GetHorarioTrabajoById(id);
-                var horarioTrabajoMapped = _mapper.Map<HorarioTrabajoDTO>(horarioTrabajo);
+                var horarioTrabajo = _horarioTrabajoServices.GetHorarioTrabajoById(id);       
                 if (horarioTrabajo == null)
                 {
                     return NotFound("Horario de Trabajo Inexistente");
                 }
+                var horarioTrabajoMapped = _mapper.Map<HorarioTrabajoResponseDTO>(horarioTrabajo);
                 return Ok(horarioTrabajoMapped);
             }
             catch (Exception e)

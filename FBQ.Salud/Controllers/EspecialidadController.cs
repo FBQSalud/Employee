@@ -25,7 +25,7 @@ namespace FBQ.Salud_Presentation.Controllers
             try
             {
                 var especialidad = _especialidadServices.GetAll();
-                var especialidadMapped = _mapper.Map<List<EspecialidadDTO>>(especialidad);
+                var especialidadMapped = _mapper.Map<List<EspecialidadResponseDTO>>(especialidad);
 
                 return Ok(especialidadMapped);
             }
@@ -41,11 +41,12 @@ namespace FBQ.Salud_Presentation.Controllers
             try
             {
                 var especialidad = _especialidadServices.GetEspecialidadById(id);
-                var especialidadMapped = _mapper.Map<EspecialidadDTO>(especialidad);
+              
                 if (especialidad == null)
                 {
                     return NotFound("Especialidad Inexistente");
                 }
+                var especialidadMapped = _mapper.Map<EspecialidadResponseDTO>(especialidad);
                 return Ok(especialidadMapped);
             }
             catch (Exception e)

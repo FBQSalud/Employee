@@ -15,6 +15,15 @@ namespace FBQ.Salud_Presentation.Utilities
             CreateMap<HorarioTrabajo, HorarioTrabajoDTO>().ReverseMap();
             CreateMap<Especialidad, EspecialidadDTO>().ReverseMap();
             CreateMap<Habitacion, HabitacionDTO>().ReverseMap();
+
+            CreateMap<MedicoResponseDTO, Medico>().ReverseMap();
+            CreateMap<EnfermeraResponseDTO, Enfermera>().ReverseMap();
+            CreateMap<EmpleadoResponseDTO, Empleado>().ReverseMap();
+            CreateMap<TipoEmpleadoResponseDTO, TipoEmpleado>().ReverseMap();
+            CreateMap<HorarioTrabajoResponseDTO, HorarioTrabajo>().ReverseMap();
+            CreateMap<EspecialidadResponseDTO, Especialidad>().ReverseMap();
+            CreateMap<HabitacionResponseDTO, Habitacion>().ReverseMap();
+            CreateMap<HabitacionResponseDTO, HabitacionDTO>().ReverseMap();
         }
     }
 }

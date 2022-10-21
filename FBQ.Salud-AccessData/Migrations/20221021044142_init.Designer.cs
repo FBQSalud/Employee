@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FBQ.Salud_AccessData.Migrations
 {
     [DbContext(typeof(FbqSaludDbContext))]
-    [Migration("20221019050925_init")]
+    [Migration("20221021044142_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -68,6 +68,8 @@ namespace FBQ.Salud_AccessData.Migrations
 
                     b.HasKey("EmpleadoId");
 
+                    b.HasIndex("HorarioId");
+
                     b.ToTable("Empleados");
                 });
 
@@ -94,6 +96,8 @@ namespace FBQ.Salud_AccessData.Migrations
 
                     b.HasKey("EnfermeraId");
 
+                    b.HasIndex("EmpleadoId");
+
                     b.ToTable("Enfermeras");
                 });
 
@@ -108,9 +112,6 @@ namespace FBQ.Salud_AccessData.Migrations
                     b.Property<string>("Descripcion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Estado")
-                        .HasColumnType("bit");
 
                     b.HasKey("EspecilalidadId");
 
@@ -153,7 +154,7 @@ namespace FBQ.Salud_AccessData.Migrations
                             HabitacionId = 1,
                             EnfermeraId = 1,
                             Estado = true,
-                            Fecha = new DateTime(2022, 10, 19, 2, 9, 24, 864, DateTimeKind.Local).AddTicks(5747),
+                            Fecha = new DateTime(2022, 10, 21, 1, 41, 42, 618, DateTimeKind.Local).AddTicks(9173),
                             Numero = 204,
                             PacienteId = 1,
                             Piso = 1
@@ -163,7 +164,7 @@ namespace FBQ.Salud_AccessData.Migrations
                             HabitacionId = 2,
                             EnfermeraId = 1,
                             Estado = true,
-                            Fecha = new DateTime(2022, 10, 19, 2, 9, 24, 864, DateTimeKind.Local).AddTicks(5757),
+                            Fecha = new DateTime(2022, 10, 21, 1, 41, 42, 618, DateTimeKind.Local).AddTicks(9183),
                             Numero = 205,
                             PacienteId = 2,
                             Piso = 1
@@ -173,7 +174,7 @@ namespace FBQ.Salud_AccessData.Migrations
                             HabitacionId = 3,
                             EnfermeraId = 1,
                             Estado = true,
-                            Fecha = new DateTime(2022, 10, 19, 2, 9, 24, 864, DateTimeKind.Local).AddTicks(5759),
+                            Fecha = new DateTime(2022, 10, 21, 1, 41, 42, 618, DateTimeKind.Local).AddTicks(9184),
                             Numero = 206,
                             PacienteId = 3,
                             Piso = 1
@@ -183,7 +184,7 @@ namespace FBQ.Salud_AccessData.Migrations
                             HabitacionId = 4,
                             EnfermeraId = 1,
                             Estado = true,
-                            Fecha = new DateTime(2022, 10, 19, 2, 9, 24, 864, DateTimeKind.Local).AddTicks(5760),
+                            Fecha = new DateTime(2022, 10, 21, 1, 41, 42, 618, DateTimeKind.Local).AddTicks(9185),
                             Numero = 207,
                             PacienteId = 4,
                             Piso = 1
@@ -193,7 +194,7 @@ namespace FBQ.Salud_AccessData.Migrations
                             HabitacionId = 5,
                             EnfermeraId = 2,
                             Estado = true,
-                            Fecha = new DateTime(2022, 10, 19, 2, 9, 24, 864, DateTimeKind.Local).AddTicks(5761),
+                            Fecha = new DateTime(2022, 10, 21, 1, 41, 42, 618, DateTimeKind.Local).AddTicks(9186),
                             Numero = 208,
                             PacienteId = 5,
                             Piso = 1
@@ -203,7 +204,7 @@ namespace FBQ.Salud_AccessData.Migrations
                             HabitacionId = 6,
                             EnfermeraId = 2,
                             Estado = true,
-                            Fecha = new DateTime(2022, 10, 19, 2, 9, 24, 864, DateTimeKind.Local).AddTicks(5762),
+                            Fecha = new DateTime(2022, 10, 21, 1, 41, 42, 618, DateTimeKind.Local).AddTicks(9188),
                             Numero = 209,
                             PacienteId = 6,
                             Piso = 1
@@ -213,7 +214,7 @@ namespace FBQ.Salud_AccessData.Migrations
                             HabitacionId = 7,
                             EnfermeraId = 3,
                             Estado = true,
-                            Fecha = new DateTime(2022, 10, 19, 2, 9, 24, 864, DateTimeKind.Local).AddTicks(5763),
+                            Fecha = new DateTime(2022, 10, 21, 1, 41, 42, 618, DateTimeKind.Local).AddTicks(9189),
                             Numero = 210,
                             PacienteId = 7,
                             Piso = 1
@@ -223,7 +224,7 @@ namespace FBQ.Salud_AccessData.Migrations
                             HabitacionId = 8,
                             EnfermeraId = 3,
                             Estado = true,
-                            Fecha = new DateTime(2022, 10, 19, 2, 9, 24, 864, DateTimeKind.Local).AddTicks(5764),
+                            Fecha = new DateTime(2022, 10, 21, 1, 41, 42, 618, DateTimeKind.Local).AddTicks(9190),
                             Numero = 211,
                             PacienteId = 8,
                             Piso = 1
@@ -270,7 +271,7 @@ namespace FBQ.Salud_AccessData.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MedicoId"), 1L, 1);
 
-                    b.Property<int>("EmpeleadoId")
+                    b.Property<int>("EmpleadoId")
                         .HasColumnType("int");
 
                     b.Property<int>("EspecialidadId")
@@ -283,6 +284,10 @@ namespace FBQ.Salud_AccessData.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("MedicoId");
+
+                    b.HasIndex("EmpleadoId");
+
+                    b.HasIndex("EspecialidadId");
 
                     b.ToTable("Medicos");
                 });
@@ -305,6 +310,47 @@ namespace FBQ.Salud_AccessData.Migrations
                     b.HasKey("TipoEmpleadoId");
 
                     b.ToTable("TipoEmpleados");
+                });
+
+            modelBuilder.Entity("FBQ.Salud_Domain.Entities.Empleado", b =>
+                {
+                    b.HasOne("FBQ.Salud_Domain.Entities.HorarioTrabajo", "horario")
+                        .WithMany()
+                        .HasForeignKey("HorarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("horario");
+                });
+
+            modelBuilder.Entity("FBQ.Salud_Domain.Entities.Enfermera", b =>
+                {
+                    b.HasOne("FBQ.Salud_Domain.Entities.Empleado", "Empleado")
+                        .WithMany()
+                        .HasForeignKey("EmpleadoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Empleado");
+                });
+
+            modelBuilder.Entity("FBQ.Salud_Domain.Entities.Medico", b =>
+                {
+                    b.HasOne("FBQ.Salud_Domain.Entities.Empleado", "Empleado")
+                        .WithMany()
+                        .HasForeignKey("EmpleadoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FBQ.Salud_Domain.Entities.Especialidad", "Especialidad")
+                        .WithMany()
+                        .HasForeignKey("EspecialidadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Empleado");
+
+                    b.Navigation("Especialidad");
                 });
 #pragma warning restore 612, 618
         }
