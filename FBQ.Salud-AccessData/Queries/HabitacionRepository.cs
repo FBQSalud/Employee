@@ -2,6 +2,7 @@
 using FBQ.Salud_AccessData.Commands;
 using FBQ.Salud_Domain.Commands;
 using FBQ.Salud_Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace FBQ.Salud_AccessData.Queries
 {
@@ -16,17 +17,17 @@ namespace FBQ.Salud_AccessData.Queries
 
         public List<Habitacion> GetAll()
         {
-            return _context.Habitaciones.ToList();
+            return _context.Habitaciones.Where(Habitacion => Habitacion.Estado == true).ToList();
         }
 
         public Habitacion GetHabitacionById(int id)
         {
-            return _context.Habitaciones.FirstOrDefault(habita => habita.HabitacionId == id);
+            return _context.Habitaciones.FirstOrDefault(habita => habita.HabitacionId == id && habita.Estado == true);
         }
 
         public Habitacion GetHabitacionByNumero(int numero)
         {
-            return _context.Habitaciones.FirstOrDefault(habita => habita.Numero == numero);
+            return _context.Habitaciones.FirstOrDefault(habita => habita.Numero == numero && habita.Estado == true);
         }
 
         public void Update(Habitacion habitacion)

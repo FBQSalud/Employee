@@ -10,17 +10,21 @@ namespace FBQ.Salud_Presentation.Controllers
     public class MedicoController : ControllerBase
     {
         IMedicoServices _medicoServices;
+        IEmpleadoServices _empleadoServices;
        IHorarioTrabajoServices _horarioTrabajoServices;
         IEspecialidadServices _especialidadServices;
+        IEnfermeraServices _enfermeraServices;
         private readonly IMapper _mapper;
 
         public MedicoController(IMedicoServices medicoServices, IEmpleadoServices empleadoServices,IHorarioTrabajoServices horarioTrabajoServices,
-            IMapper mapper, IEspecialidadServices especialidadServices)
+            IMapper mapper, IEspecialidadServices especialidadServices, IEnfermeraServices enfermeraServices)
         {
             _medicoServices = medicoServices;
             _mapper = mapper;
             _horarioTrabajoServices = horarioTrabajoServices;
             _especialidadServices = especialidadServices;
+            _empleadoServices = empleadoServices;
+            _enfermeraServices = enfermeraServices;
         }
         /// <summary>
         ///  Endpoint dedicado a obtener todos los medicos. 
@@ -33,7 +37,7 @@ namespace FBQ.Salud_Presentation.Controllers
             try
             {
                 var medico = _medicoServices.GetAll();
-                var medicoMapped = _mapper.Map<List<MedicoDTO>>(medico);
+                var medicoMapped = _mapper.Map<List<MedicoResponseDTO>>(medico);
 
                 return Ok(medicoMapped);
             }
@@ -47,7 +51,7 @@ namespace FBQ.Salud_Presentation.Controllers
         ///  Endpoint dedicado a obtener un medico por Id. 
         /// </summary>
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(EmpleadoDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(MedicoResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Get(int id)
@@ -56,12 +60,13 @@ namespace FBQ.Salud_Presentation.Controllers
             try
             {
                 var medico = _medicoServices.GetMedicoById(id);
-                var medicoMapped = _mapper.Map<MedicoDTO>(medico);
+
                 if (medico == null)
                 {
                     response = new ResponseDTO { message = "Medico inexistente", statuscode = "404" };
                     return NotFound(response);
                 }
+                var medicoMapped = _mapper.Map<MedicoResponseDTO>(medico);
                 return Ok(medicoMapped);
             }
             catch (Exception e)
@@ -71,7 +76,7 @@ namespace FBQ.Salud_Presentation.Controllers
             }
         }
         /// <summary>
-        ///  Endpoint dedicado a la creación de empleados.
+        ///  Endpoint dedicado a la creación de Medicos.
         /// </summary>
         [HttpPost]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
@@ -82,21 +87,35 @@ namespace FBQ.Salud_Presentation.Controllers
             var response = new ResponseDTO();
             try
             {
-                var medicoCheck = _medicoServices.GetMedicoById(medico.EmpleadoId);
+                var medicoCheck = _medicoServices.GetMedicoByEmpleadoId(medico.EmpleadoId);
+                var EmpleadoCheck = _empleadoServices.GetEmpleadoById(medico.EmpleadoId);
+                var EnfermeraCheck = _enfermeraServices.GetEnfermeraByEmpleadoId(medico.EmpleadoId);
+              
+                if (EmpleadoCheck == null)
+                {
+                    response = new ResponseDTO { message = "El id del empleado ingresado no existe", statuscode = "404" };
+                    return NotFound(response);
+                }
+                if (EnfermeraCheck != null)
+                {
+                    response = new ResponseDTO { message = "El id del empleado ingresado corresponde a una enfermera.", statuscode = "409" };
+                    return Conflict(response);
+
+                }
                 if (medicoCheck != null)
                 {
                     response = new ResponseDTO { message = "El id del medico ingresado corresponde a uno ya existente.", statuscode = "409" };
                     return Conflict(response);
                 }
                 var HorarioCheck = _horarioTrabajoServices.GetHorarioTrabajoById(medico.HorarioId);
-                if (HorarioCheck != null)
+                if (HorarioCheck == null)
                 {
                     response = new ResponseDTO { message = "El id del horario ingresado no existe", statuscode = "404" };
                     return Conflict(response);
                 }
 
                 var EspacialidadId = _especialidadServices.GetEspecialidadById(medico.EspecialidadId);
-                if(EspacialidadId != null)
+                if(EspacialidadId == null)
                 {
                     response = new ResponseDTO { message = "El id de la especialidad ingresada no existe", statuscode = "404" };
                     return Conflict(response);
@@ -106,10 +125,9 @@ namespace FBQ.Salud_Presentation.Controllers
                 if (medicoEntity != null)
                 {
                     var UserCreated = _mapper.Map<MedicoDTO>(medicoEntity);
-                    response = new ResponseDTO { message = "Empleado Creado", statuscode = "200" };
+                    response = new ResponseDTO { message = "Medico Creado", statuscode = "200" };
                     return Ok(response);
                 }
-
                 throw new FormatException();
             }
             catch (Exception e)
@@ -118,6 +136,7 @@ namespace FBQ.Salud_Presentation.Controllers
                 return BadRequest(ErrorResponse);
             }
         }
+
         /// <summary>
         ///  Endpoint dedicado a  la actualizacíón de un medico.
         /// </summary>
@@ -158,7 +177,7 @@ namespace FBQ.Salud_Presentation.Controllers
             }
         }
         /// <summary>
-        ///  Endpoint dedicado a  la eliminación de un empleado.
+        ///  Endpoint dedicado a  la eliminación de un medico.
         /// </summary>
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]

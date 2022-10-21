@@ -1,4 +1,5 @@
 ﻿
+using FBQ.Salud_Domain.Dtos;
 using System.ComponentModel.DataAnnotations;
 
 namespace FBQ.Salud_Domain.Entities
@@ -31,5 +32,7 @@ namespace FBQ.Salud_Domain.Entities
         public string Clave { get; set; }
         [Required]
         public int HorarioId { get; set; }
+
+        public virtual HorarioTrabajo horario { get; set; }
     }
 }

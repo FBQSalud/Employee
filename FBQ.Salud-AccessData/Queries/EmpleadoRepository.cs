@@ -2,6 +2,8 @@
 using FBQ.Salud_AccessData.Commands;
 using FBQ.Salud_Domain.Commands;
 using FBQ.Salud_Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace FBQ.Salud_AccessData.Queries
 {
@@ -16,12 +18,12 @@ namespace FBQ.Salud_AccessData.Queries
        
         public List<Empleado> GetAll()
         {
-            return _context.Empleados.ToList();
+            return _context.Empleados.Include(a => a.horario ).Where(empleado => empleado.Estado == true).ToList();
         }
 
         public Empleado GetEmpleadoById(int id)
         {
-            return _context.Empleados.FirstOrDefault(empleado => empleado.EmpleadoId == id);
+            return _context.Empleados.Include(a => a.horario).FirstOrDefault(empleado => empleado.EmpleadoId == id && empleado.Estado == true);
         }
 
         public void Add(Empleado empleado)
@@ -44,7 +46,12 @@ namespace FBQ.Salud_AccessData.Queries
 
         public Empleado GetEmpleadoByDni(string dni)
         {
-            return _context.Empleados.FirstOrDefault(empleado => empleado.DNI == dni);
+            return _context.Empleados.Include(a => a.horario).FirstOrDefault(empleado => empleado.DNI == dni && empleado.Estado == true);
+        }
+
+        public Empleado GetEmpleadoByUser(string user)
+        {
+            return _context.Empleados.Include(a => a.horario).FirstOrDefault(empleado => empleado.Usuario == user && empleado.Estado == true);
         }
     }
 }

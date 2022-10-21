@@ -6,6 +6,7 @@ namespace FBQ.Salud_Domain.Commands
     {
         List<Enfermera> GetAll();
         Enfermera GetEnfermeraById(int id);
+        Enfermera GetEnfermeraByEmpleadoId(int id);
         void Update(Enfermera enfermera);
         void Delete(Enfermera enfermera);
         void Add(Enfermera enfermera);
