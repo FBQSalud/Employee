@@ -10,7 +10,6 @@ namespace FBQ.Salud_Domain.Dtos
     {
         public virtual EmpleadoResponseDTO Empleado{ get; set; }
         public string TipoEnfermera { get; set; }
-        public int HorarioId { get; set; } 
 
  
 
