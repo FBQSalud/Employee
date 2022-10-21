@@ -12,6 +12,7 @@ namespace FBQ.Salud_Application.Services
     {
         List<Empleado> GetAll();
         Empleado GetEmpleadoById(int id);
+        Empleado GetEmpleadoByDni(string dni);
         void Update(Empleado empleado);
         void Delete(Empleado empleado);
         Empleado CreateEmpleado(EmpleadoDTO empleado);
@@ -54,6 +55,11 @@ namespace FBQ.Salud_Application.Services
         public void Delete(Empleado empleado)
         {
             _empleadoRepository.Delete(empleado);
+        }
+
+        public Empleado GetEmpleadoByDni(string dni)
+        {
+            return _empleadoRepository.GetEmpleadoByDni(dni);
         }
     }
 }
