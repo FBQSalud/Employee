@@ -3,6 +3,7 @@ using FBQ.Salud_AccessData.Queries;
 using FBQ.Salud_Application.Services;
 using FBQ.Salud_Domain.Commands;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,12 @@ builder.Services.AddDbContext<FbqSaludDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// Set the comments path for the Swagger JSON and UI.
+var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+builder.Services.AddSwaggerGen(c => c.IncludeXmlComments(xmlPath));
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 //Repository
 builder.Services.AddTransient<IMedicoRepository, MedicoRepository>();
@@ -24,6 +30,8 @@ builder.Services.AddTransient<IMedicoServices, MedicoServices>();
 builder.Services.AddTransient<IEnfermeraRepository, EnfermeraRepository>();
 builder.Services.AddTransient<IEnfermeraServices, EnfermeraServices>();
 builder.Services.AddTransient<IEmpleadoRepository, EmpleadoRepository>();
+builder.Services.AddTransient<IHabitacionRepository, HabitacionRepository>();
+builder.Services.AddTransient<IHabitacionServices, HabitacionServices>();
 builder.Services.AddTransient<IEmpleadoServices, EmpleadoServices>();
 builder.Services.AddTransient<ITipoEmpleadoRepository, TipoEmpleadoRepository>();
 builder.Services.AddTransient<ITipoEmpleadoServices, TipoEmpleadoServices>();

@@ -6,8 +6,7 @@ namespace FBQ.Salud_Domain.Dtos
 {
     public class EmpleadoDTO
     {
-        public int EmpleadoId { get; set; }
-        [Required]
+
         public int TipoEmpleadoId { get; set; }
         [Required]
         [Display(Name = "Nombre")]
