@@ -41,11 +41,11 @@ namespace FBQ.Salud_Presentation.Controllers
             try
             {
                 var tipoEmpleado = _tipoEmpleadoServices.GetTipoEmpleadoById(id);
-                var tipoEmpleadoMapped = _mapper.Map<TipoEmpleadoDTO>(tipoEmpleado);
                 if (tipoEmpleado == null)
                 {
                     return NotFound("Tipo de Empleado Inexistente");
                 }
+                var tipoEmpleadoMapped = _mapper.Map<TipoEmpleadoDTO>(tipoEmpleado);
                 return Ok(tipoEmpleadoMapped);
             }
             catch (Exception e)

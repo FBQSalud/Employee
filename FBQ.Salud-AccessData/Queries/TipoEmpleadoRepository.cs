@@ -16,12 +16,12 @@ namespace FBQ.Salud_AccessData.Queries
 
         public List<TipoEmpleado> GetAll()
         {
-            return _context.TipoEmpleados.ToList();
+            return _context.TipoEmpleados.Where(tipo => tipo.Estado == true).ToList();
         }
 
         public TipoEmpleado GetTipoEmpleadoById(int id)
         {
-            return _context.TipoEmpleados.FirstOrDefault(tipoEmpleado => tipoEmpleado.TipoEmpleadoId == id);
+            return _context.TipoEmpleados.FirstOrDefault(tipoEmpleado => tipoEmpleado.TipoEmpleadoId == id && tipoEmpleado.Estado == true);
         }
 
         public void Add(TipoEmpleado tipoEmpleado)

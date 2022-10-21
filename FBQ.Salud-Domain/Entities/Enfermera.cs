@@ -13,5 +13,7 @@ namespace FBQ.Salud_Domain.Entities
         public string TipoEnfermera { get; set; }
         public bool Estado { get; set; }
         public int HorarioId { get; set; }
+        
+        public virtual Empleado Empleado { get; set; }
     }
 }

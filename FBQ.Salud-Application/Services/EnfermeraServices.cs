@@ -10,6 +10,7 @@ namespace FBQ.Salud_Application.Services
     {
         List<Enfermera> GetAll();
         Enfermera GetEnfermeraById(int id);
+        Enfermera GetEnfermeraByEmpleadoId(int id);
         void Update(Enfermera enfermera);
         void Delete(Enfermera enfermera);
         Enfermera CreateEnfermera(EnfermeraDTO enfermera);
@@ -51,6 +52,11 @@ namespace FBQ.Salud_Application.Services
         public void Delete(Enfermera enfermera)
         {
             _enfermeraRepository.Delete(enfermera);
+        }
+
+        public Enfermera GetEnfermeraByEmpleadoId(int id)
+        {
+            return _enfermeraRepository.GetEnfermeraByEmpleadoId(id);
         }
     }
 }

@@ -2,13 +2,15 @@
 using FBQ.Salud_Domain.Commands;
 using FBQ.Salud_Domain.Dtos;
 using FBQ.Salud_Domain.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace FBQ.Salud_Application.Services
 {
     public interface IMedicoServices
     {
-        List<Medico> GetAll();
+        List<MedicoResponseDTO> GetAll();
         Medico GetMedicoById(int id);
+        Medico GetMedicoByEmpleadoId(int id);
         void Update(Medico medico);
         void Delete(Medico medico);
         Medico CreateMedico(MedicoDTO medico);
@@ -25,9 +27,10 @@ namespace FBQ.Salud_Application.Services
             _mapper = mapper;
         }
 
-        public List<Medico> GetAll()
+        public List<MedicoResponseDTO> GetAll()
         {
-            return _medicoRepository.GetAll();
+            var test = _mapper.Map<List<MedicoResponseDTO>>(_medicoRepository.GetAll());
+            return test;
         }
 
         public Medico GetMedicoById(int id)
@@ -51,6 +54,11 @@ namespace FBQ.Salud_Application.Services
         public void Delete(Medico medico)
         {
             _medicoRepository.Delete(medico);
+        }
+
+        public Medico GetMedicoByEmpleadoId(int id)
+        {
+            return _medicoRepository.GetMedicoByEmpleadoId(id);
         }
     }
 }

@@ -38,7 +38,9 @@ namespace FBQ.Salud_Presentation.Controllers
             try
             {
                 var Response = new ResponseDTO();
-                var Habitaciones = _habitacionServices.GetAll();          
+                var Habitaciones = _habitacionServices.GetAll();
+                var HabitacionesMapped = _mapper.Map<List<HabitacionResponseDTO>>(Habitaciones);
+
 
                 return Ok(Habitaciones);
             }
@@ -76,7 +78,7 @@ namespace FBQ.Salud_Presentation.Controllers
                     Response = new ResponseDTO { message = "La habitación no existe.", statuscode = "404" };
                     return NotFound(Response);
                 }
-                if (HabitacionFind.EnfermeraId != null)
+                if (HabitacionFind.EnfermeraId != 0)
                 {
                      Response = new ResponseDTO { message = "La habitación ya tiene asignada una enfermera.", statuscode = "409" };
                     return Conflict(Response);
@@ -151,13 +153,12 @@ namespace FBQ.Salud_Presentation.Controllers
                     Response = new ResponseDTO { message = "La habitación no existe.", statuscode = "404" };
                     return NotFound(Response);
                 }
-                if (Habitacion.Estado == true)
+                if (Habitacion.PacienteId != 0)
                 {
                     Response = new ResponseDTO { message = "La habitación ya se encuentra ocupada.", statuscode = "409" };
                     return Conflict(Response);
                 }
                 Habitacion.PacienteId = pacienteId;
-                Habitacion.Estado = false;
                 _habitacionServices.Update(Habitacion);
                 Response = new ResponseDTO { message = "Paciente ingresado a habitación " + numero + ", piso " + Habitacion.Piso + " correctamente.", statuscode = "200" };
                 return Ok();
@@ -190,13 +191,12 @@ namespace FBQ.Salud_Presentation.Controllers
                     Response = new ResponseDTO { message = "Habitación Inexistente", statuscode = "404" };
                     return NotFound(Response);
                 }
-                if(habitacion.Estado == false)
+                if(habitacion.PacienteId == 0)
                 {
                     Response = new ResponseDTO { message = "La habitación está vacía.", statuscode = "409" };
                     return Conflict(Response);
                 }
                 habitacion.PacienteId = 0;
-                habitacion.Estado = true;
                 _habitacionServices.Update(habitacion);
                 Response = new ResponseDTO { message = " habitación " +  numero + ", piso " + habitacion.Piso + " desocupada correctamente.", statuscode = "200" };
                 return Ok(Response);

@@ -2,6 +2,7 @@
 using FBQ.Salud_AccessData.Commands;
 using FBQ.Salud_Domain.Commands;
 using FBQ.Salud_Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace FBQ.Salud_AccessData.Queries
 {
@@ -16,12 +17,12 @@ namespace FBQ.Salud_AccessData.Queries
         
         public List<Enfermera> GetAll()
         {
-            return _context.Enfermeras.ToList();
+            return _context.Enfermeras.Include(e => e.Empleado).ThenInclude(horario => horario.horario).Where(enfermera => enfermera.Estado == true).ToList();
         }
 
         public Enfermera GetEnfermeraById(int id)
         {
-            return _context.Enfermeras.FirstOrDefault(enfermera => enfermera.EnfermeraId == id);
+            return _context.Enfermeras.Include(e => e.Empleado).ThenInclude(horario => horario.horario).FirstOrDefault(enfermera => enfermera.EnfermeraId == id && enfermera.Estado == true);
         }
 
         public void Add(Enfermera enfermera)
@@ -40,6 +41,11 @@ namespace FBQ.Salud_AccessData.Queries
         {
             _context.Enfermeras.Remove(enfermera);
             _context.SaveChanges();
+        }
+
+        public Enfermera GetEnfermeraByEmpleadoId(int id)
+        {
+            return _context.Enfermeras.Include(e => e.Empleado).ThenInclude(horario => horario.horario).FirstOrDefault(enfermera => enfermera.EmpleadoId == id && enfermera.Estado == true);
         }
     }
 }

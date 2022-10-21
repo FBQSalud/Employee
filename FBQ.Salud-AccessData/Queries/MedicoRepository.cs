@@ -1,6 +1,7 @@
 ﻿using FBQ.Salud_AccessData.Commands;
 using FBQ.Salud_Domain.Commands;
 using FBQ.Salud_Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace FBQ.Salud_AccessData.Queries
 {
@@ -15,12 +16,19 @@ namespace FBQ.Salud_AccessData.Queries
             
         public List<Medico> GetAll()
         {
-            return _context.Medicos.ToList();
+            return _context.Medicos.Include(Especialidad => Especialidad.Especialidad)
+                .Include(empleado => empleado.Empleado)
+                .ThenInclude(horario => horario.horario)
+                .Where(medico => medico.Estado == true)
+                .ToList();
         }
 
         public Medico GetMedicoById(int id)
         {
-            return _context.Medicos.FirstOrDefault(medico => medico.MedicoId == id);
+            return _context.Medicos.Include(Especialidad => Especialidad.Especialidad)
+                .Include(empleado => empleado.Empleado)
+                .ThenInclude(horario => horario.horario)
+                .FirstOrDefault(medico => medico.MedicoId == id && medico.Estado == true);
         }
 
         public void Add(Medico medico)
@@ -39,6 +47,14 @@ namespace FBQ.Salud_AccessData.Queries
         {
             _context.Medicos.Remove(medico);
             _context.SaveChanges();
+        }
+
+        public Medico GetMedicoByEmpleadoId(int id)
+        {
+            return _context.Medicos.Include(Especialidad => Especialidad.Especialidad)
+                .Include(empleado => empleado.Empleado)
+                .ThenInclude(horario => horario.horario)
+                .FirstOrDefault(medico => medico.EmpleadoId == id && medico.Estado == true);
         }
     }
 }
