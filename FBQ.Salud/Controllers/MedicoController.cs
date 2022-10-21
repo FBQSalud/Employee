@@ -10,16 +10,24 @@ namespace FBQ.Salud_Presentation.Controllers
     public class MedicoController : ControllerBase
     {
         IMedicoServices _medicoServices;
+       IHorarioTrabajoServices _horarioTrabajoServices;
+        IEspecialidadServices _especialidadServices;
         private readonly IMapper _mapper;
 
-        public MedicoController(IMedicoServices medicoServices, 
-            IMapper mapper)
+        public MedicoController(IMedicoServices medicoServices, IEmpleadoServices empleadoServices,IHorarioTrabajoServices horarioTrabajoServices,
+            IMapper mapper, IEspecialidadServices especialidadServices)
         {
             _medicoServices = medicoServices;
             _mapper = mapper;
+            _horarioTrabajoServices = horarioTrabajoServices;
+            _especialidadServices = especialidadServices;
         }
-
-        [HttpGet]
+        /// <summary>
+        ///  Endpoint dedicado a obtener todos los medicos. 
+        /// </summary>
+        [HttpGet("todos/")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
         public IActionResult GetAll()
         {
             try
@@ -31,96 +39,152 @@ namespace FBQ.Salud_Presentation.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                var ErrorResponse = new ResponseDTO { message = "Se ha ingresado los datos en un formato incorrecto, Excepcion :" + e.Message, statuscode = "400" };
+                return BadRequest(ErrorResponse);
             }
         }
-
+        /// <summary>
+        ///  Endpoint dedicado a obtener un medico por Id. 
+        /// </summary>
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(EmpleadoDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Get(int id)
         {
+            var response = new ResponseDTO();
             try
             {
                 var medico = _medicoServices.GetMedicoById(id);
                 var medicoMapped = _mapper.Map<MedicoDTO>(medico);
                 if (medico == null)
                 {
-                    return NotFound("Medico Inexistente");
+                    response = new ResponseDTO { message = "Medico inexistente", statuscode = "404" };
+                    return NotFound(response);
                 }
                 return Ok(medicoMapped);
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                var ErrorResponse = new ResponseDTO { message = "Se ha ingresado los datos en un formato incorrecto, Excepcion :" + e.Message, statuscode = "400" };
+                return BadRequest(ErrorResponse);
             }
         }
-
+        /// <summary>
+        ///  Endpoint dedicado a la creación de empleados.
+        /// </summary>
         [HttpPost]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
         public IActionResult CreateMedico([FromForm] MedicoDTO medico)
         {
+            var response = new ResponseDTO();
             try
             {
+                var medicoCheck = _medicoServices.GetMedicoById(medico.EmpleadoId);
+                if (medicoCheck != null)
+                {
+                    response = new ResponseDTO { message = "El id del medico ingresado corresponde a uno ya existente.", statuscode = "409" };
+                    return Conflict(response);
+                }
+                var HorarioCheck = _horarioTrabajoServices.GetHorarioTrabajoById(medico.HorarioId);
+                if (HorarioCheck != null)
+                {
+                    response = new ResponseDTO { message = "El id del horario ingresado no existe", statuscode = "404" };
+                    return Conflict(response);
+                }
+
+                var EspacialidadId = _especialidadServices.GetEspecialidadById(medico.EspecialidadId);
+                if(EspacialidadId != null)
+                {
+                    response = new ResponseDTO { message = "El id de la especialidad ingresada no existe", statuscode = "404" };
+                    return Conflict(response);
+                }  
                 var medicoEntity = _medicoServices.CreateMedico(medico);
 
                 if (medicoEntity != null)
                 {
                     var UserCreated = _mapper.Map<MedicoDTO>(medicoEntity);
-                    return Ok("Medico Creado");
+                    response = new ResponseDTO { message = "Empleado Creado", statuscode = "200" };
+                    return Ok(response);
                 }
 
-                return BadRequest();
+                throw new FormatException();
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                var ErrorResponse = new ResponseDTO { message = "Se ha ingresado los datos en un formato incorrecto, Excepcion :" + e.Message, statuscode = "400" };
+                return BadRequest(ErrorResponse);
             }
         }
-
+        /// <summary>
+        ///  Endpoint dedicado a  la actualizacíón de un medico.
+        /// </summary>
         [HttpPut("{id}")]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
         public IActionResult UpdateMedico(int id, MedicoDTO medico)
         {
+            var response = new ResponseDTO();
             try
             {
                 if (medico == null)
                 {
-                    return BadRequest("Completar todos los campos para realizar la actualizacion");
+                   
+                    response = new ResponseDTO { message = "Completar todos los campos para realizar la actualizacion", statuscode = "400" };
+                    return BadRequest(response);
                 }
 
                 var medicoUpdate = _medicoServices.GetMedicoById(id);
 
                 if (medicoUpdate == null)
                 {
-                    return NotFound("Medico Inexistente");
+                    response = new ResponseDTO { message = "Médico inexistente", statuscode = "404" };
+                    return NotFound(response);
                 }
 
                 _mapper.Map(medico, medicoUpdate);
                 _medicoServices.Update(medicoUpdate);
 
-                return Ok("Medico actualizado");
+                response = new ResponseDTO { message = "Médico actualizado", statuscode = "200" };
+                return Ok(response);
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                var ErrorResponse = new ResponseDTO { message = "Se ha ingresado los datos en un formato incorrecto, Excepcion :" + e.Message, statuscode = "400" };
+                return BadRequest(ErrorResponse);
             }
         }
-
+        /// <summary>
+        ///  Endpoint dedicado a  la eliminación de un empleado.
+        /// </summary>
         [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
         public IActionResult DeleteMedico(int id)
         {
+            var response = new ResponseDTO();
             try
             {
                 var medico = _medicoServices.GetMedicoById(id);
 
                 if (medico == null)
                 {
-                    return NotFound("Medico Inexistente");
+                    response = new ResponseDTO { message = "Médico inexistente", statuscode = "404" };
+                    return NotFound(response);
                 }
 
                 _medicoServices.Delete(medico);
-                return Ok("Medico eliminado");
+                response = new ResponseDTO { message = "Médico eliminado", statuscode = "200" };
+                return Ok(response);
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                var ErrorResponse = new ResponseDTO { message = "Se ha ingresado los datos en un formato incorrecto, Excepcion :" + e.Message, statuscode = "400" };
+                return BadRequest(ErrorResponse);
             }
         }
     }

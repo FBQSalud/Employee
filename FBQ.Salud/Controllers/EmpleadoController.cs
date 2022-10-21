@@ -57,7 +57,7 @@ namespace FBQ.Salud_Presentation.Controllers
                 var empleadoMapped = _mapper.Map<EmpleadoDTO>(empleado);
                 if (empleado == null)
                 {
-                     response = new ResponseDTO { message = "Empleado Inexistente", statuscode = "404" };
+                     response = new ResponseDTO { message = "Empleado inexistente", statuscode = "404" };
                     return NotFound(response);
                 }
                 return Ok(empleadoMapped);
@@ -150,6 +150,9 @@ namespace FBQ.Salud_Presentation.Controllers
         ///  Endpoint dedicado a  la eliminación de un empleado
         /// </summary>
         [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
         public IActionResult DeleteEmpleado(int id)
         {
             var response = new ResponseDTO();
