@@ -41,5 +41,10 @@ namespace FBQ.Salud_AccessData.Queries
             _context.Remove(empleado);
             _context.SaveChanges();
         }
+
+        public Empleado GetEmpleadoByDni(string dni)
+        {
+            return _context.Empleados.FirstOrDefault(empleado => empleado.DNI == dni);
+        }
     }
 }
