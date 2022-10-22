@@ -2,9 +2,7 @@
 using FBQ.Salud_Application.Services;
 using FBQ.Salud_Domain.Dtos;
 using FBQ.Salud_Domain.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel;
 
 namespace FBQ.Salud_Presentation.Controllers
 {
@@ -14,7 +12,6 @@ namespace FBQ.Salud_Presentation.Controllers
     {
         IHabitacionServices _habitacionServices;
         IEnfermeraServices _enfermeraServices;
-        IMedicoServices _medicoServices; 
         private readonly IMapper _mapper;
 
         public HabitacionController(IHabitacionServices habitacionServices, 
@@ -25,7 +22,6 @@ namespace FBQ.Salud_Presentation.Controllers
             _habitacionServices = habitacionServices;
             _mapper = mapper;
             _enfermeraServices = enfermeraServices;
-            _medicoServices = medicoServices;
         }
         /// <summary>
         ///  Endpoint dedicado a obtener todas las habitaciónes. 
