@@ -18,8 +18,12 @@ namespace FBQ.Salud_Presentation.Controllers
             _horarioTrabajoServices = horarioTrabajoServices;
             _mapper = mapper;
         }
-
-        [HttpGet]
+        /// <summary>
+        ///  Endpoint dedicado a obtener todos los horarios de trabajo. 
+        /// </summary>
+        [HttpGet("todos/")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
         public IActionResult GetAll()
         {
             try
@@ -31,32 +35,49 @@ namespace FBQ.Salud_Presentation.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                var ErrorResponse = new ResponseDTO { message = "Se ha ingresado los datos en un formato incorrecto, Excepcion :" + e.Message, statuscode = "400" };
+                return BadRequest(ErrorResponse);
             }
         }
 
+        /// <summary>
+        ///  Endpoint dedicado a obtener un Horario de trabajo por Id. 
+        /// </summary>
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(HorarioTrabajoResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Get(int id)
         {
+            var response = new ResponseDTO();
             try
             {
                 var horarioTrabajo = _horarioTrabajoServices.GetHorarioTrabajoById(id);       
                 if (horarioTrabajo == null)
                 {
-                    return NotFound("Horario de Trabajo Inexistente");
+                    response = new ResponseDTO { message = "Horario de trabajo inexistente", statuscode = "404" };
+                    return NotFound(response);
                 }
                 var horarioTrabajoMapped = _mapper.Map<HorarioTrabajoResponseDTO>(horarioTrabajo);
                 return Ok(horarioTrabajoMapped);
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                var ErrorResponse = new ResponseDTO { message = "Se ha ingresado los datos en un formato incorrecto, Excepcion :" + e.Message, statuscode = "400" };
+                return BadRequest(ErrorResponse);
             }
         }
 
+        /// <summary>
+        ///  Endpoint dedicado a la creación de Horarios de Trabajo.
+        /// </summary>
         [HttpPost]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
         public IActionResult CreateHorarioTrabajo([FromForm] HorarioTrabajoDTO horarioTrabajo)
         {
+            var response = new ResponseDTO();
             try
             {
                 var horarioTrabajoEntity = _horarioTrabajoServices.CreateHorarioTrabajo(horarioTrabajo);
@@ -64,63 +85,86 @@ namespace FBQ.Salud_Presentation.Controllers
                 if (horarioTrabajoEntity != null)
                 {
                     var horarioTrabajoCreated = _mapper.Map<HorarioTrabajoDTO>(horarioTrabajoEntity);
-                    return Ok("Horario de Trabajo Creado");
+                    response = new ResponseDTO { message = "Horario de Trabajo Creado", statuscode = "200" };
+                    return Ok(response);
                 }
 
-                return BadRequest();
+                throw new FormatException();
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                var ErrorResponse = new ResponseDTO { message = "Se ha ingresado los datos en un formato incorrecto, Excepcion :" + e.Message, statuscode = "400" };
+                return BadRequest(ErrorResponse);
             }
         }
-
+        /// <summary>
+        ///  Endpoint dedicado a  la actualizacíón de un horario de trabajo.
+        /// </summary>
         [HttpPut("{id}")]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
         public IActionResult UpdateHorarioTrabajo(int id, HorarioTrabajoDTO horarioTrabajo)
         {
+            var response = new ResponseDTO();
             try
             {
                 if (horarioTrabajo == null)
                 {
-                    return BadRequest("Completar todos los campos para realizar la actualizacion");
+                    response = new ResponseDTO { message = "Completar todos los campos para realizar la actualizacion", statuscode = "400" };
+                    return BadRequest(response);
                 }
 
                 var horarioTrabajoUpdate = _horarioTrabajoServices.GetHorarioTrabajoById(id);
 
                 if (horarioTrabajo == null)
                 {
-                    return NotFound("Horario de Trabajo Inexistente");
+                    response = new ResponseDTO { message = "Horario de Trabajo inexistente", statuscode = "404" };
+                    return NotFound(response);
                 }
 
                 _mapper.Map(horarioTrabajo, horarioTrabajoUpdate);
                 _horarioTrabajoServices.Update(horarioTrabajoUpdate);
-
-                return Ok("Horario de Trabajo actualizado");
+                response = new ResponseDTO { message = "Horario De Trabajo actualizado", statuscode = "200" };
+                return Ok(response);
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                var ErrorResponse = new ResponseDTO { message = "Se ha ingresado los datos en un formato incorrecto, Excepcion :" + e.Message, statuscode = "400" };
+                return BadRequest(ErrorResponse);
             }
         }
 
+        /// <summary>
+        ///  Endpoint dedicado a  la eliminación de un empleado
+        /// </summary>
         [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
         public IActionResult DeleteHorarioTrabajo(int id)
         {
+            var response = new ResponseDTO();
             try
             {
                 var horarioTrabajo = _horarioTrabajoServices.GetHorarioTrabajoById(id);
 
                 if (horarioTrabajo == null)
                 {
-                    return NotFound("Horario de Trabajo Inexistente");
+                    response = new ResponseDTO { message = "Horario de Trabajo inexistente", statuscode = "404" };
+                    return NotFound(response);
                 }
 
                 _horarioTrabajoServices.Delete(horarioTrabajo);
-                return Ok("Horario de Trabajo eliminado");
+                response = new ResponseDTO { message = "Horario de Trabajo eliminado", statuscode = "200" };
+                return Ok(response);
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                var ErrorResponse = new ResponseDTO { message = "Se ha ingresado los datos en un formato incorrecto, Excepcion :" + e.Message, statuscode = "400" };
+                return BadRequest(ErrorResponse);
             }
         }
     }

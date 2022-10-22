@@ -19,7 +19,10 @@ namespace FBQ.Salud_Presentation.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
+        /// <summary>
+        ///  Endpoint dedicado a obtener todas las especialidades. 
+        /// </summary>
+        [HttpGet("todos/")]
         public IActionResult GetAll()
         {
             try
@@ -31,97 +34,138 @@ namespace FBQ.Salud_Presentation.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                var ErrorResponse = new ResponseDTO { message = "Se ha ingresado los datos en un formato incorrecto, Excepcion :" + e.Message, statuscode = "400" };
+                return BadRequest(ErrorResponse);
             }
         }
 
+        /// <summary>
+        ///  Endpoint dedicado a obtener una Especialidad por Id. 
+        /// </summary>
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(EspecialidadResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Get(int id)
         {
             try
             {
+                var response = new ResponseDTO();
                 var especialidad = _especialidadServices.GetEspecialidadById(id);
               
                 if (especialidad == null)
                 {
-                    return NotFound("Especialidad Inexistente");
+                    response = new ResponseDTO { message = "Especialidad inexistente", statuscode = "404" };
+                    return NotFound(response);
                 }
                 var especialidadMapped = _mapper.Map<EspecialidadResponseDTO>(especialidad);
                 return Ok(especialidadMapped);
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                var ErrorResponse = new ResponseDTO { message = "Se ha ingresado los datos en un formato incorrecto, Excepcion :" + e.Message, statuscode = "400" };
+                return BadRequest(ErrorResponse);
             }
         }
-
+        /// <summary>
+        ///  Endpoint dedicado a la creación de Especialidades.
+        /// </summary>
         [HttpPost]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
         public IActionResult CreateEspecialidad([FromForm] EspecialidadDTO especialidad)
         {
             try
             {
+                var response = new ResponseDTO();
                 var especialidadEntity = _especialidadServices.CreateEspecialidad(especialidad);
 
                 if (especialidadEntity != null)
                 {
                     var especialidadCreated = _mapper.Map<EspecialidadDTO>(especialidadEntity);
-                    return Ok("Especialidad Creada");
+                    response = new ResponseDTO { message = "Empleado Creado", statuscode = "200" };
+                    return Ok(response);
                 }
 
-                return BadRequest();
+                throw new FormatException();
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                var ErrorResponse = new ResponseDTO { message = "Se ha ingresado los datos en un formato incorrecto, Excepcion :" + e.Message, statuscode = "400" };
+                return BadRequest(ErrorResponse);
             }
         }
 
+        /// <summary>
+        ///  Endpoint dedicado a  la actualizacíón de una especialidad
+        /// </summary>
         [HttpPut("{id}")]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
         public IActionResult UpdateEspecialidad(int id, EspecialidadDTO especialidad)
         {
+            var response = new ResponseDTO();
             try
             {
                 if (especialidad == null)
                 {
-                    return BadRequest("Completar todos los campos para realizar la actualizacion");
+                    response = new ResponseDTO { message = "Completar todos los campos para realizar la actualizacion", statuscode = "400" };
+                    return BadRequest(response);
                 }
 
                 var especialidadUpdate = _especialidadServices.GetEspecialidadById(id);
 
                 if (especialidadUpdate == null)
                 {
-                    return NotFound("Especialidad Inexistente");
+                    response = new ResponseDTO { message = "Especialidad inexistente", statuscode = "404" };
+                    return NotFound(response);
                 }
 
                 _mapper.Map(especialidad, especialidadUpdate);
                 _especialidadServices.Update(especialidadUpdate);
-
-                return Ok("Especialidad actualizada");
+                response = new ResponseDTO { message = "Especialidad actualizado", statuscode = "200" };
+                return Ok(response);
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                var ErrorResponse = new ResponseDTO { message = "Se ha ingresado los datos en un formato incorrecto, Excepcion :" + e.Message, statuscode = "400" };
+                return BadRequest(ErrorResponse);
             }
         }
 
+        /// <summary>
+        ///  Endpoint dedicado a  la eliminación de una especialidad
+        /// </summary>
         [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
         public IActionResult DeleteEspecialidad(int id)
         {
+            var response = new ResponseDTO();
             try
             {
+
                 var especialidad = _especialidadServices.GetEspecialidadById(id);
 
                 if (especialidad == null)
                 {
-                    return NotFound("Especialidad Inexistente");
+                    response = new ResponseDTO { message = "Especialidad inexistente", statuscode = "404" };
+                    return NotFound(response);
                 }
 
                 _especialidadServices.Delete(especialidad);
-                return Ok("Especialidad eliminada");
+                response = new ResponseDTO { message = "Especialidad eliminada", statuscode = "200" };
+                return Ok(response);
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                var ErrorResponse = new ResponseDTO { message = "Se ha ingresado los datos en un formato incorrecto, Excepcion :" + e.Message, statuscode = "400" };
+                return BadRequest(ErrorResponse);
             }
         }
     }
