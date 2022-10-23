@@ -73,7 +73,7 @@ namespace FBQ.Salud_Presentation.Controllers
         ///  Endpoint dedicado a la creación de Tipo de Empleado.
         /// </summary>
         [HttpPost]
-        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
@@ -87,8 +87,8 @@ namespace FBQ.Salud_Presentation.Controllers
                 if (tipoEmpleadoEntity != null)
                 {
                     var tipoEmpleadoCreated = _mapper.Map<TipoEmpleadoDTO>(tipoEmpleadoEntity);
-                    response = new ResponseDTO { message = "Tipo de Empleado Creado.", statuscode = "200" };
-                    return Ok(response);
+                    response = new ResponseDTO { message = "Tipo de Empleado Creado.", statuscode = "201" };
+                    return Created("Sucess", response);
                 }
 
                 throw new FormatException();

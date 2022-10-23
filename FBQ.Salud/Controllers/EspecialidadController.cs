@@ -71,7 +71,7 @@ namespace FBQ.Salud_Presentation.Controllers
         ///  Endpoint dedicado a la creación de Especialidades.
         /// </summary>
         [HttpPost]
-        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
         public IActionResult CreateEspecialidad([FromForm] EspecialidadDTO especialidad)
@@ -84,8 +84,8 @@ namespace FBQ.Salud_Presentation.Controllers
                 if (especialidadEntity != null)
                 {
                     var especialidadCreated = _mapper.Map<EspecialidadDTO>(especialidadEntity);
-                    response = new ResponseDTO { message = "Empleado Creado", statuscode = "200" };
-                    return Ok(response);
+                    response = new ResponseDTO { message = "Especialidad Creado", statuscode = "200" };
+                    return Created("Sucess", response);
                 }
 
                 throw new FormatException();
