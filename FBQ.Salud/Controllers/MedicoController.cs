@@ -79,7 +79,7 @@ namespace FBQ.Salud_Presentation.Controllers
         ///  Endpoint dedicado a la creación de Medicos.
         /// </summary>
         [HttpPost]
-        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
@@ -127,7 +127,7 @@ namespace FBQ.Salud_Presentation.Controllers
                 {
                     var UserCreated = _mapper.Map<MedicoDTO>(medicoEntity);
                     response = new ResponseDTO { message = "Medico Creado", statuscode = "200" };
-                    return Ok(response);
+                    return Created("Sucess", response);
                 }
                 throw new FormatException();
             }

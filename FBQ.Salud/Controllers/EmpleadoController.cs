@@ -72,7 +72,7 @@ namespace FBQ.Salud_Presentation.Controllers
         ///  Endpoint dedicado a la creación de empleados.
         /// </summary>
         [HttpPost]
-        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
         public IActionResult CreateEmpleado([FromForm] EmpleadoDTO empleado)
@@ -86,8 +86,8 @@ namespace FBQ.Salud_Presentation.Controllers
                 {
                     EmpleadoExists.Estado = true;
                     _empleadoServices.Update(EmpleadoExists);
-                    response = new ResponseDTO { message = "Empleado existente: se lo ha vuelto a reactivar. ID : "+EmpleadoExists.EmpleadoId, statuscode = "200" };
-                    return Ok(response);
+                    response = new ResponseDTO { message = "Empleado existente: se lo ha vuelto a reactivar. ID : "+EmpleadoExists.EmpleadoId, statuscode = "201" };
+                    return Created("Empleado Creado",response);
                 }
 
                 if(EmpleadoExists != null)
@@ -104,8 +104,8 @@ namespace FBQ.Salud_Presentation.Controllers
                 if (empleadoEntity != null)
                 {
                     var empleadoCreated = _mapper.Map<EmpleadoDTO>(empleadoEntity);
-                    response = new ResponseDTO { message = "Empleado Creado", statuscode = "200" };
-                    return Ok(response);
+                    response = new ResponseDTO { message = "Empleado Creado", statuscode = "201" };
+                    return Created("Sucess", response);
                 }
 
                 throw new FormatException();
