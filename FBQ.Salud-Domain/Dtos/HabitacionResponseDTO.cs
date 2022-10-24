@@ -1,4 +1,5 @@
 ﻿
+using FBQ.Salud_Domain.Dtos;
 using System.ComponentModel.DataAnnotations;
 
 namespace FBQ.Salud_Domain.Entities
@@ -7,8 +8,7 @@ namespace FBQ.Salud_Domain.Entities
     {
         [Display(Name = "PacienteId")]
         public int pacienteId { get; set; }
-        [Display(Name = "EnfermeraId")]
-        public int enfermeraId { get; set; }
+        public virtual EnfermeraResponseDTO? Enfermera { get; set; }
         [Required]
         [Display(Name = "Piso")]
         public int Piso { get; set; }

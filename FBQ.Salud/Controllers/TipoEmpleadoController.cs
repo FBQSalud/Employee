@@ -20,7 +20,7 @@ namespace FBQ.Salud_Presentation.Controllers
         }
 
         /// <summary>
-        ///  Endpoint dedicado a obtener todas las enfermeras. 
+        ///  Endpoint dedicado a obtener todos los tipos de empleados. 
         /// </summary>
         [HttpGet("todos/")]
         [ProducesResponseType(StatusCodes.Status200OK)]

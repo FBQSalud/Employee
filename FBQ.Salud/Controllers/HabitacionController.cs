@@ -16,8 +16,7 @@ namespace FBQ.Salud_Presentation.Controllers
 
         public HabitacionController(IHabitacionServices habitacionServices, 
             IMapper mapper,
-            IEnfermeraServices enfermeraServices,
-            IMedicoServices medicoServices)
+            IEnfermeraServices enfermeraServices)
         {
             _habitacionServices = habitacionServices;
             _mapper = mapper;
@@ -35,7 +34,6 @@ namespace FBQ.Salud_Presentation.Controllers
             {
                 var Response = new ResponseDTO();
                 var Habitaciones = _habitacionServices.GetAll();
-                var HabitacionesMapped = _mapper.Map<List<HabitacionResponseDTO>>(Habitaciones);
 
 
                 return Ok(Habitaciones);
@@ -74,12 +72,14 @@ namespace FBQ.Salud_Presentation.Controllers
                     Response = new ResponseDTO { message = "La habitación no existe.", statuscode = "404" };
                     return NotFound(Response);
                 }
-                if (HabitacionFind.EnfermeraId != 0)
+                if (HabitacionFind.Estado == true)
                 {
-                     Response = new ResponseDTO { message = "La habitación ya tiene asignada una enfermera.", statuscode = "409" };
+                    Response = new ResponseDTO { message = "La habitación ya tiene asignada una enfermera.", statuscode = "409" };
                     return Conflict(Response);
                 }
                 HabitacionFind.EnfermeraId = enfermeraId;
+                HabitacionFind.Enfermera = EnfermeraFind;
+                HabitacionFind.Estado = true;
                 _habitacionServices.Update(HabitacionFind);
                  Response = new ResponseDTO { message = "Enfermera a sido asignada a habitación " + HabitacionFind.Numero + ", piso " + HabitacionFind.Piso + " correctamente.", statuscode = "200" };
                 return Ok(Response);
@@ -112,12 +112,12 @@ namespace FBQ.Salud_Presentation.Controllers
                     Response = new ResponseDTO { message = "La habitación no existe.", statuscode = "404" };
                     return NotFound(Response);
                 }
-                if (habitacion.EnfermeraId == 0)
+                if (habitacion.Estado == false)
                 {
                     Response = new ResponseDTO { message = "La habitación No tiene asignada una enfermera.", statuscode = "409" };
                     return Conflict(Response);
                 }
-                habitacion.EnfermeraId = 0;
+                habitacion.Estado = false;
                 _habitacionServices.Update(habitacion);
                 Response = new ResponseDTO { message = "Se ha desasignado a la enfermera de la habitación " + habitacion.Numero + ", piso " + habitacion.Piso + " correctamente.", statuscode = "200" };
                 return Ok(Response);
