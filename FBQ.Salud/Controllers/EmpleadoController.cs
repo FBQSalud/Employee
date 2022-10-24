@@ -119,12 +119,12 @@ namespace FBQ.Salud_Presentation.Controllers
         /// <summary>
         ///  Endpoint dedicado a  la actualizacíón de un empleado
         /// </summary>
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
-        public IActionResult UpdateEmpleado(int id, EmpleadoDTO empleado)
+        public IActionResult UpdateEmpleado(int id, EmpleadoPatchResponseDTO empleado)
         {
             var response = new ResponseDTO();
             try
@@ -134,6 +134,7 @@ namespace FBQ.Salud_Presentation.Controllers
                     response = new ResponseDTO { message = "Completar todos los campos para realizar la actualizacion", statuscode = "400" };
                     return BadRequest(response);
                 }
+
 
                 var empleadoUpdate = _empleadoServices.GetEmpleadoById(id);
 

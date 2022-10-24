@@ -18,7 +18,10 @@ namespace FBQ.Salud_Presentation.Utilities
 
             CreateMap<MedicoResponseDTO, Medico>().ReverseMap();
             CreateMap<EnfermeraResponseDTO, Enfermera>().ReverseMap();
+            CreateMap<MedicoPatchDTO, Medico>().ReverseMap();
+            CreateMap<EnfermeraPatchResponseDTO, Enfermera>().ReverseMap();
             CreateMap<EmpleadoResponseDTO, Empleado>().ReverseMap();
+            CreateMap<EmpleadoPatchResponseDTO, Empleado>().ReverseMap();
             CreateMap<TipoEmpleadoResponseDTO, TipoEmpleado>().ReverseMap();
             CreateMap<HorarioTrabajoResponseDTO, HorarioTrabajo>().ReverseMap();
             CreateMap<EspecialidadResponseDTO, Especialidad>().ReverseMap();

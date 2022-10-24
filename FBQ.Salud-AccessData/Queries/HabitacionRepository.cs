@@ -17,7 +17,7 @@ namespace FBQ.Salud_AccessData.Queries
 
         public List<Habitacion> GetAll()
         {
-            return _context.Habitaciones.Include(enfermera => enfermera.Enfermera).ThenInclude(empl => empl.Empleado).ThenInclude(horario => horario.horario).ToList();
+            return _context.Habitaciones.Where(habita => habita.PacienteId != 0).Include(enfermera => enfermera.Enfermera).ThenInclude(empl => empl.Empleado).ThenInclude(horario => horario.horario).ToList();
         }
 
         public Habitacion GetHabitacionById(int id)

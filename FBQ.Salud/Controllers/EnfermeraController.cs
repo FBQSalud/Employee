@@ -134,12 +134,12 @@ namespace FBQ.Salud_Presentation.Controllers
         /// <summary>
         ///  Endpoint dedicado a  la actualizacíón de un enfermera
         /// </summary>
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
-        public IActionResult UpdateEnfermera(int id, EnfermeraDTO enfermera)
+        public IActionResult UpdateEnfermera(int id, EnfermeraPatchResponseDTO enfermera)
         {
             var response = new ResponseDTO();
             try
