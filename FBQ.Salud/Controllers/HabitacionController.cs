@@ -25,7 +25,7 @@ namespace FBQ.Salud_Presentation.Controllers
         /// <summary>
         ///  Endpoint dedicado a obtener todas las habitaciónes. 
         /// </summary>
-        [HttpGet("todos/")]
+        [HttpGet()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
         public IActionResult GetAll()
@@ -82,7 +82,7 @@ namespace FBQ.Salud_Presentation.Controllers
                 HabitacionFind.Estado = true;
                 _habitacionServices.Update(HabitacionFind);
                  Response = new ResponseDTO { message = "Enfermera a sido asignada a habitación " + HabitacionFind.Numero + ", piso " + HabitacionFind.Piso + " correctamente.", statuscode = "200" };
-                return Ok(Response);
+                return Created("", Response);
             }
             catch (Exception e)
             {

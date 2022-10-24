@@ -21,7 +21,7 @@ namespace FBQ.Salud_Presentation.Controllers
         /// <summary>
         ///  Endpoint dedicado a obtener todos los horarios de trabajo. 
         /// </summary>
-        [HttpGet("todos/")]
+        [HttpGet()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
         public IActionResult GetAll()
