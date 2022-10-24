@@ -119,7 +119,7 @@ namespace FBQ.Salud_Presentation.Controllers
                 if (enfermeraEntity != null)
                 {
                     var enfermeraCreated = _mapper.Map<EnfermeraResponseDTO>(enfermeraEntity);
-                    response = new ResponseDTO { message = "Enfermera Creada", statuscode = "200" };
+                    response = new ResponseDTO { message = "Enfermera Creada", statuscode = "201" };
                     return Created("Sucess", response);
                 }
 

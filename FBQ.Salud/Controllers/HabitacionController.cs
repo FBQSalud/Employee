@@ -45,7 +45,30 @@ namespace FBQ.Salud_Presentation.Controllers
             }
         }
 
- 
+        /// <summary>
+        ///  Endpoint dedicado a obtener todas las habitaciónes Desocupadas. 
+        /// </summary>
+        [HttpGet("Free")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
+        public IActionResult GetAllFree()
+        {
+            try
+            {
+                var Response = new ResponseDTO();
+                var Habitaciones = _habitacionServices.GetAllFree();
+
+
+                return Ok(Habitaciones);
+            }
+            catch (Exception e)
+            {
+                var ErrorResponse = new ResponseDTO { message = "Se ha ingresado los datos en un formato incorrecto, Excepcion :" + e.Message, statuscode = "400" };
+                return BadRequest(ErrorResponse);
+            }
+        }
+
+
         /// <summary>
         ///  Endpoint dedicado a asignar enfermeras a  una habitación.
         /// </summary>
@@ -82,7 +105,7 @@ namespace FBQ.Salud_Presentation.Controllers
                 HabitacionFind.Estado = true;
                 _habitacionServices.Update(HabitacionFind);
                  Response = new ResponseDTO { message = "Enfermera a sido asignada a habitación " + HabitacionFind.Numero + ", piso " + HabitacionFind.Piso + " correctamente.", statuscode = "200" };
-                return Created("", Response);
+                return Created("Sucess", Response);
             }
             catch (Exception e)
             {

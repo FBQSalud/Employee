@@ -84,7 +84,7 @@ namespace FBQ.Salud_Presentation.Controllers
                 if (especialidadEntity != null)
                 {
                     var especialidadCreated = _mapper.Map<EspecialidadDTO>(especialidadEntity);
-                    response = new ResponseDTO { message = "Especialidad Creada", statuscode = "200" };
+                    response = new ResponseDTO { message = "Especialidad Creada", statuscode = "201" };
                     return Created("Sucess", response);
                 }
 

@@ -11,6 +11,7 @@ namespace FBQ.Salud_Application.Services
     public interface IHabitacionServices
     {
         List<HabitacionResponseDTO> GetAll();
+        List<HabitacionResponseDTO> GetAllFree();
         Habitacion GetHabitacionById(int id);
         void Update(Habitacion habitacion);
         Habitacion GetHabitacionByNumero(int numero);
@@ -48,6 +49,12 @@ namespace FBQ.Salud_Application.Services
         public Habitacion GetHabitacionByNumero(int numero)
         {
             return _habitacionRepository.GetHabitacionByNumero(numero);
+        }
+
+        public List<HabitacionResponseDTO> GetAllFree()
+        {
+            List<Habitacion> list = _habitacionRepository.GetAllFree();
+            return _mapper.Map<List<HabitacionResponseDTO>>(list);
         }
     }
 }

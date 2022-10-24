@@ -20,6 +20,11 @@ namespace FBQ.Salud_AccessData.Queries
             return _context.Habitaciones.Where(habita => habita.PacienteId != 0).Include(enfermera => enfermera.Enfermera).ThenInclude(empl => empl.Empleado).ThenInclude(horario => horario.horario).ToList();
         }
 
+        public List<Habitacion> GetAllFree()
+        {
+            return _context.Habitaciones.Where(habita => habita.PacienteId == 0).Include(enfermera => enfermera.Enfermera).ThenInclude(empl => empl.Empleado).ThenInclude(horario => horario.horario).ToList();
+        }
+
         public Habitacion GetHabitacionById(int id)
         {
             return _context.Habitaciones.Include(enfermera => enfermera.Enfermera).ThenInclude(empl => empl.Empleado).ThenInclude(horario => horario.horario).FirstOrDefault(habita => habita.HabitacionId == id );

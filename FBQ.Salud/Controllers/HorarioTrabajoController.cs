@@ -85,7 +85,7 @@ namespace FBQ.Salud_Presentation.Controllers
                 if (horarioTrabajoEntity != null)
                 {
                     var horarioTrabajoCreated = _mapper.Map<HorarioTrabajoDTO>(horarioTrabajoEntity);
-                    response = new ResponseDTO { message = "Horario de Trabajo Creado", statuscode = "200" };
+                    response = new ResponseDTO { message = "Horario de Trabajo Creado", statuscode = "201" };
                     return Created("Sucess", response);
                 }
 

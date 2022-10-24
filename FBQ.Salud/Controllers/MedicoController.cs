@@ -126,7 +126,7 @@ namespace FBQ.Salud_Presentation.Controllers
                 if (medicoEntity != null)
                 {
                     var UserCreated = _mapper.Map<MedicoDTO>(medicoEntity);
-                    response = new ResponseDTO { message = "Medico Creado", statuscode = "200" };
+                    response = new ResponseDTO { message = "Medico Creado", statuscode = "201" };
                     return Created("Sucess", response);
                 }
                 throw new FormatException();
