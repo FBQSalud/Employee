@@ -22,6 +22,8 @@ namespace FBQ.Salud_Domain.Entities
         [Display(Name = "Fecha")]
         public DateTime Fecha { get; set; }
 
+        public virtual Enfermera Enfermera { get; set; }
+
 
     }
 }

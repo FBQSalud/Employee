@@ -72,7 +72,7 @@ namespace FBQ.Salud_Presentation.Controllers
         ///  Endpoint dedicado a la creación de empleados.
         /// </summary>
         [HttpPost]
-        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
         public IActionResult CreateEmpleado([FromForm] EmpleadoDTO empleado)
@@ -81,6 +81,14 @@ namespace FBQ.Salud_Presentation.Controllers
             try
             {
                 var EmpleadoExists = _empleadoServices.GetEmpleadoByDni(empleado.DNI);
+
+                if (EmpleadoExists != null && EmpleadoExists.Estado == false)
+                {
+                    EmpleadoExists.Estado = true;
+                    _empleadoServices.Update(EmpleadoExists);
+                    response = new ResponseDTO { message = "Empleado existente: se lo ha vuelto a reactivar. ID : "+EmpleadoExists.EmpleadoId, statuscode = "201" };
+                    return Created("Empleado Creado",response);
+                }
 
                 if(EmpleadoExists != null)
                 {
@@ -96,8 +104,8 @@ namespace FBQ.Salud_Presentation.Controllers
                 if (empleadoEntity != null)
                 {
                     var empleadoCreated = _mapper.Map<EmpleadoDTO>(empleadoEntity);
-                    response = new ResponseDTO { message = "Empleado Creado", statuscode = "200" };
-                    return Ok(response);
+                    response = new ResponseDTO { message = "Empleado Creado", statuscode = "201" };
+                    return Created("Sucess", response);
                 }
 
                 throw new FormatException();
@@ -112,6 +120,7 @@ namespace FBQ.Salud_Presentation.Controllers
         ///  Endpoint dedicado a  la actualizacíón de un empleado
         /// </summary>
         [HttpPut("{id}")]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
@@ -137,7 +146,6 @@ namespace FBQ.Salud_Presentation.Controllers
                 _mapper.Map(empleado, empleadoUpdate);
                 _empleadoServices.Update(empleadoUpdate);
                 response = new ResponseDTO { message = "Empleado actualizado", statuscode = "200" };
-
                 return Ok(response);
             }
             catch (Exception e)
@@ -151,9 +159,11 @@ namespace FBQ.Salud_Presentation.Controllers
         ///  Endpoint dedicado a  la eliminación de un empleado
         /// </summary>
         [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
-        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]public IActionResult DeleteEmpleado(int id)
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
+        public IActionResult DeleteEmpleado(int id)
         {
             var response = new ResponseDTO();
             try
@@ -165,8 +175,9 @@ namespace FBQ.Salud_Presentation.Controllers
                     response = new ResponseDTO { message = "Empleado inexistente", statuscode = "404" };
                     return NotFound(response);
                 }
-               
-                _empleadoServices.Delete(empleado);
+
+                empleado.Estado = false;
+                _empleadoServices.Update(empleado);
                 response = new ResponseDTO { message = "Empleado eliminado", statuscode = "200" };
                 return Ok(response);
             }

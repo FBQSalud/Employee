@@ -78,6 +78,7 @@ namespace FBQ.Salud_Presentation.Controllers
         ///  Endpoint dedicado a la creación de enfermeras.
         /// </summary>
         [HttpPost]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
@@ -119,20 +120,22 @@ namespace FBQ.Salud_Presentation.Controllers
                 {
                     var enfermeraCreated = _mapper.Map<EnfermeraResponseDTO>(enfermeraEntity);
                     response = new ResponseDTO { message = "Enfermera Creada", statuscode = "200" };
-                    return Ok(response);
+                    return Created("Sucess", response);
                 }
 
                 throw new FormatException();
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                var ErrorResponse = new ResponseDTO { message = "Se ha ingresado los datos en un formato incorrecto, Excepcion :" + e.Message, statuscode = "400" };
+                return BadRequest(ErrorResponse);
             }
         }
         /// <summary>
         ///  Endpoint dedicado a  la actualizacíón de un enfermera
         /// </summary>
         [HttpPut("{id}")]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]
@@ -154,12 +157,9 @@ namespace FBQ.Salud_Presentation.Controllers
                     response = new ResponseDTO { message = "Enfermera inexistente", statuscode = "404" };
                     return NotFound(response);
                 }
-
                 _mapper.Map(enfermera, enfermeraUpdate);
                 _enfermeraServices.Update(enfermeraUpdate);
-
                 response = new ResponseDTO { message = "Enfermera actualizada", statuscode = "200" };
-
                 return Ok(response);
             }
             catch (Exception e)
@@ -172,6 +172,7 @@ namespace FBQ.Salud_Presentation.Controllers
         ///  Endpoint dedicado a  la eliminación de un enfermera
         /// </summary>
         [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ResponseDTO), StatusCodes.Status400BadRequest)]

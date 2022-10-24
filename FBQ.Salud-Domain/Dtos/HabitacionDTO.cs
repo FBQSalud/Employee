@@ -21,6 +21,6 @@ namespace FBQ.Salud_Domain.Entities
         [Required]
         [Display(Name = "Fecha")]
         public DateTime Fecha { get; set; }
-       
+    
     }
 }

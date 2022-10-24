@@ -17,17 +17,17 @@ namespace FBQ.Salud_AccessData.Queries
 
         public List<Habitacion> GetAll()
         {
-            return _context.Habitaciones.Where(Habitacion => Habitacion.Estado == true).ToList();
+            return _context.Habitaciones.Include(enfermera => enfermera.Enfermera).ThenInclude(empl => empl.Empleado).ThenInclude(horario => horario.horario).ToList();
         }
 
         public Habitacion GetHabitacionById(int id)
         {
-            return _context.Habitaciones.FirstOrDefault(habita => habita.HabitacionId == id && habita.Estado == true);
+            return _context.Habitaciones.Include(enfermera => enfermera.Enfermera).ThenInclude(empl => empl.Empleado).ThenInclude(horario => horario.horario).FirstOrDefault(habita => habita.HabitacionId == id );
         }
 
         public Habitacion GetHabitacionByNumero(int numero)
         {
-            return _context.Habitaciones.FirstOrDefault(habita => habita.Numero == numero && habita.Estado == true);
+            return _context.Habitaciones.Include(enfermera => enfermera.Enfermera).ThenInclude(empl => empl.Empleado).ThenInclude(horario => horario.horario).FirstOrDefault(habita => habita.Numero == numero);
         }
 
         public void Update(Habitacion habitacion)
