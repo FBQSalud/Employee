@@ -10,7 +10,7 @@ namespace FBQ.Salud_Application.Services
 {
     public interface IHabitacionServices
     {
-        List<HabitacionDTO> GetAll();
+        List<HabitacionResponseDTO> GetAll();
         Habitacion GetHabitacionById(int id);
         void Update(Habitacion habitacion);
         Habitacion GetHabitacionByNumero(int numero);
@@ -27,10 +27,10 @@ namespace FBQ.Salud_Application.Services
             _mapper = mapper;
         }
 
-        public List<HabitacionDTO> GetAll()
+        public List<HabitacionResponseDTO> GetAll()
         {
             List<Habitacion> list = _habitacionRepository.GetAll();
-               return  _mapper.Map<List<HabitacionDTO>>(list);
+               return  _mapper.Map<List<HabitacionResponseDTO>>(list);
             
             
         }
