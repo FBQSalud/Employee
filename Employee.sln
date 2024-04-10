@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FBQ.Salud-Presentation", "FBQ.Salud\FBQ.Salud-Presentation.csproj", "{BC686831-DEC2-4CF5-B030-C636571E6D73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FBQ.Salud-Presentation", "FBQ.Salud\FBQ.Salud-Presentation.csproj", "{BC686831-DEC2-4CF5-B030-C636571E6D73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FBQ.Salud-AccessData", "FBQ.Salud-AccessData\FBQ.Salud-AccessData.csproj", "{4DEDBED5-5916-4699-B0A9-F806921BD4C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FBQ.Salud-AccessData", "FBQ.Salud-AccessData\FBQ.Salud-AccessData.csproj", "{4DEDBED5-5916-4699-B0A9-F806921BD4C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FBQ.Salud-Application", "FBQ.Salud-Application\FBQ.Salud-Application.csproj", "{62D80D8C-6254-4632-937D-3DDD22698E62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FBQ.Salud-Application", "FBQ.Salud-Application\FBQ.Salud-Application.csproj", "{62D80D8C-6254-4632-937D-3DDD22698E62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FBQ.Salud-Domain", "FBQ.Salud-Domain\FBQ.Salud-Domain.csproj", "{7CAF252E-124C-4146-80E8-FF695628EB0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FBQ.Salud-Domain", "FBQ.Salud-Domain\FBQ.Salud-Domain.csproj", "{7CAF252E-124C-4146-80E8-FF695628EB0E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
