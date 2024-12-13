@@ -21,7 +21,7 @@ namespace FBQ.Salud_AccessData.Queries
 
         public Especialidad GetEspecialidadById(int id)
         {
-            return _context.Especialidades.FirstOrDefault(especialidad => especialidad.EspecilalidadId == id);
+            return _context.Especialidades.FirstOrDefault(especialidad => especialidad.EspecialidadId == id);
         }
 
         public void Add(Especialidad especialidad)

@@ -5,7 +5,7 @@ namespace FBQ.Salud_Domain.Dtos
 {
     public class EspecialidadResponseDTO
     {
-        public int EspecilalidadId { get; set; }
+        public int EspecialidadId { get; set; }
         public string Descripcion { get; set; }
     }
 }

@@ -24,8 +24,54 @@ namespace FBQ.Salud_AccessData.Commands
                   Descripcion = "Enfermera",
                   TipoEmpleadoId = 1,
                   
-              }
+              },
+                new TipoEmpleado
+                {
+                    Estado = true,
+                    Descripcion = "Medico",
+                    TipoEmpleadoId = 2,
+
+                }
           );
+
+            var medico2 = new Empleado
+            {
+                Nombre = "Calamardo",
+                Apellido = "Tentaculos",
+                Clave = "42205969Messi",
+                DNI = "201412526",
+                EmpleadoId = 10,
+                Estado = true,
+                Foto = "foto.jpg",
+                HorarioId = 3,
+                TipoEmpleadoId = 2,
+                Usuario = "Calamenda609",
+
+            };
+            var medico1 = new Empleado
+            {
+                Nombre = "Calamardo",
+                Apellido = "Tentaculos",
+                Clave = "42205969essi",
+                DNI = "201412521",
+                EmpleadoId = 9,
+                Estado = true,
+                Foto = "foto.jpg",
+                HorarioId = 3,
+                TipoEmpleadoId = 2,
+                Usuario = "Calamenda629",
+
+            };
+            var especialidad = new Especialidad
+            {
+                Descripcion = "pediatra",
+                EspecialidadId = 1,
+            };
+            var especialidad2 = new Especialidad
+            {
+                Descripcion = "cabecera",
+                EspecialidadId = 2,
+            };
 
             modelBuilder.Entity<HorarioTrabajo>().HasData
         (
@@ -57,6 +103,9 @@ namespace FBQ.Salud_AccessData.Commands
                HorarioId =3,
            }
         );
+            modelBuilder.Entity<Especialidad>().HasData(
+                especialidad,
+                especialidad2);
             modelBuilder.Entity<Empleado>().HasData(
                    new Empleado{
                         Nombre = "Mauricio",
@@ -97,8 +146,30 @@ namespace FBQ.Salud_AccessData.Commands
                        TipoEmpleadoId = 1,
                        Usuario = "Calamenda609",
 
-                   }
+                   },
+                   medico1,
+                   medico2
                    );
+
+          
+            modelBuilder.Entity<Medico>().HasData(
+                new Medico
+                {
+                    MedicoId = 1,
+                    EmpleadoId = 9,
+                    EspecialidadId = 1,
+                    Estado = true,
+                    HorarioId= 1,
+                },
+                new Medico
+                {
+                    MedicoId = 2,
+                    EmpleadoId = 10,
+                    EspecialidadId = 2,
+                    Estado = true,
+                    HorarioId = 1,
+
+                });
             modelBuilder.Entity<Habitacion>().HasData(
  new Habitacion
  {

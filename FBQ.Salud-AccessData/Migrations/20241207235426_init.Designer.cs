@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FBQ.Salud_AccessData.Migrations
 {
     [DbContext(typeof(FbqSaludDbContext))]
-    [Migration("20221128181404_init")]
+    [Migration("20241207235426_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -111,6 +111,32 @@ namespace FBQ.Salud_AccessData.Migrations
                             Nombre = "Calamardo",
                             TipoEmpleadoId = 1,
                             Usuario = "Calamenda609"
+                        },
+                        new
+                        {
+                            EmpleadoId = 9,
+                            Apellido = "Tentaculos",
+                            Clave = "42205969essi",
+                            DNI = "201412521",
+                            Estado = true,
+                            Foto = "foto.jpg",
+                            HorarioId = 3,
+                            Nombre = "Calamardo",
+                            TipoEmpleadoId = 2,
+                            Usuario = "Calamenda629"
+                        },
+                        new
+                        {
+                            EmpleadoId = 10,
+                            Apellido = "Tentaculos",
+                            Clave = "42205969Messi",
+                            DNI = "201412526",
+                            Estado = true,
+                            Foto = "foto.jpg",
+                            HorarioId = 3,
+                            Nombre = "Calamardo",
+                            TipoEmpleadoId = 2,
+                            Usuario = "Calamenda609"
                         });
                 });
 
@@ -170,19 +196,31 @@ namespace FBQ.Salud_AccessData.Migrations
 
             modelBuilder.Entity("FBQ.Salud_Domain.Entities.Especialidad", b =>
                 {
-                    b.Property<int>("EspecilalidadId")
+                    b.Property<int>("EspecialidadId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EspecilalidadId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EspecialidadId"), 1L, 1);
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("EspecilalidadId");
+                    b.HasKey("EspecialidadId");
 
                     b.ToTable("Especialidades");
+
+                    b.HasData(
+                        new
+                        {
+                            EspecialidadId = 1,
+                            Descripcion = "pediatra"
+                        },
+                        new
+                        {
+                            EspecialidadId = 2,
+                            Descripcion = "cabecera"
+                        });
                 });
 
             modelBuilder.Entity("FBQ.Salud_Domain.Entities.Habitacion", b =>
@@ -223,7 +261,7 @@ namespace FBQ.Salud_AccessData.Migrations
                             HabitacionId = 1,
                             EnfermeraId = 1,
                             Estado = true,
-                            Fecha = new DateTime(2022, 11, 28, 15, 14, 4, 347, DateTimeKind.Local).AddTicks(5469),
+                            Fecha = new DateTime(2024, 12, 7, 20, 54, 26, 556, DateTimeKind.Local).AddTicks(3052),
                             Numero = 204,
                             PacienteId = 1,
                             Piso = 1
@@ -233,7 +271,7 @@ namespace FBQ.Salud_AccessData.Migrations
                             HabitacionId = 2,
                             EnfermeraId = 1,
                             Estado = true,
-                            Fecha = new DateTime(2022, 11, 28, 15, 14, 4, 347, DateTimeKind.Local).AddTicks(5525),
+                            Fecha = new DateTime(2024, 12, 7, 20, 54, 26, 556, DateTimeKind.Local).AddTicks(3062),
                             Numero = 205,
                             PacienteId = 2,
                             Piso = 1
@@ -243,7 +281,7 @@ namespace FBQ.Salud_AccessData.Migrations
                             HabitacionId = 3,
                             EnfermeraId = 1,
                             Estado = true,
-                            Fecha = new DateTime(2022, 11, 28, 15, 14, 4, 347, DateTimeKind.Local).AddTicks(5527),
+                            Fecha = new DateTime(2024, 12, 7, 20, 54, 26, 556, DateTimeKind.Local).AddTicks(3063),
                             Numero = 206,
                             PacienteId = 3,
                             Piso = 1
@@ -253,7 +291,7 @@ namespace FBQ.Salud_AccessData.Migrations
                             HabitacionId = 4,
                             EnfermeraId = 1,
                             Estado = true,
-                            Fecha = new DateTime(2022, 11, 28, 15, 14, 4, 347, DateTimeKind.Local).AddTicks(5528),
+                            Fecha = new DateTime(2024, 12, 7, 20, 54, 26, 556, DateTimeKind.Local).AddTicks(3064),
                             Numero = 207,
                             PacienteId = 4,
                             Piso = 1
@@ -263,7 +301,7 @@ namespace FBQ.Salud_AccessData.Migrations
                             HabitacionId = 5,
                             EnfermeraId = 2,
                             Estado = true,
-                            Fecha = new DateTime(2022, 11, 28, 15, 14, 4, 347, DateTimeKind.Local).AddTicks(5529),
+                            Fecha = new DateTime(2024, 12, 7, 20, 54, 26, 556, DateTimeKind.Local).AddTicks(3065),
                             Numero = 208,
                             PacienteId = 5,
                             Piso = 1
@@ -273,7 +311,7 @@ namespace FBQ.Salud_AccessData.Migrations
                             HabitacionId = 6,
                             EnfermeraId = 2,
                             Estado = true,
-                            Fecha = new DateTime(2022, 11, 28, 15, 14, 4, 347, DateTimeKind.Local).AddTicks(5530),
+                            Fecha = new DateTime(2024, 12, 7, 20, 54, 26, 556, DateTimeKind.Local).AddTicks(3066),
                             Numero = 209,
                             PacienteId = 6,
                             Piso = 1
@@ -283,7 +321,7 @@ namespace FBQ.Salud_AccessData.Migrations
                             HabitacionId = 7,
                             EnfermeraId = 3,
                             Estado = true,
-                            Fecha = new DateTime(2022, 11, 28, 15, 14, 4, 347, DateTimeKind.Local).AddTicks(5531),
+                            Fecha = new DateTime(2024, 12, 7, 20, 54, 26, 556, DateTimeKind.Local).AddTicks(3067),
                             Numero = 210,
                             PacienteId = 7,
                             Piso = 1
@@ -293,7 +331,7 @@ namespace FBQ.Salud_AccessData.Migrations
                             HabitacionId = 8,
                             EnfermeraId = 3,
                             Estado = true,
-                            Fecha = new DateTime(2022, 11, 28, 15, 14, 4, 347, DateTimeKind.Local).AddTicks(5532),
+                            Fecha = new DateTime(2024, 12, 7, 20, 54, 26, 556, DateTimeKind.Local).AddTicks(3068),
                             Numero = 211,
                             PacienteId = 8,
                             Piso = 1
@@ -388,6 +426,24 @@ namespace FBQ.Salud_AccessData.Migrations
                     b.HasIndex("EspecialidadId");
 
                     b.ToTable("Medicos");
+
+                    b.HasData(
+                        new
+                        {
+                            MedicoId = 1,
+                            EmpleadoId = 9,
+                            EspecialidadId = 1,
+                            Estado = true,
+                            HorarioId = 1
+                        },
+                        new
+                        {
+                            MedicoId = 2,
+                            EmpleadoId = 10,
+                            EspecialidadId = 2,
+                            Estado = true,
+                            HorarioId = 1
+                        });
                 });
 
             modelBuilder.Entity("FBQ.Salud_Domain.Entities.TipoEmpleado", b =>
@@ -414,6 +470,12 @@ namespace FBQ.Salud_AccessData.Migrations
                         {
                             TipoEmpleadoId = 1,
                             Descripcion = "Enfermera",
+                            Estado = true
+                        },
+                        new
+                        {
+                            TipoEmpleadoId = 2,
+                            Descripcion = "Medico",
                             Estado = true
                         });
                 });

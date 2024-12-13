@@ -13,13 +13,13 @@ namespace FBQ.Salud_AccessData.Migrations
                 name: "Especialidades",
                 columns: table => new
                 {
-                    EspecilalidadId = table.Column<int>(type: "int", nullable: false)
+                    EspecialidadId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Especialidades", x => x.EspecilalidadId);
+                    table.PrimaryKey("PK_Especialidades", x => x.EspecialidadId);
                 });
 
             migrationBuilder.CreateTable(
@@ -126,7 +126,7 @@ namespace FBQ.Salud_AccessData.Migrations
                         name: "FK_Medicos_Especialidades_EspecialidadId",
                         column: x => x.EspecialidadId,
                         principalTable: "Especialidades",
-                        principalColumn: "EspecilalidadId",
+                        principalColumn: "EspecialidadId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -155,6 +155,15 @@ namespace FBQ.Salud_AccessData.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Especialidades",
+                columns: new[] { "EspecialidadId", "Descripcion" },
+                values: new object[,]
+                {
+                    { 1, "pediatra" },
+                    { 2, "cabecera" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "HorariosTrabajo",
                 columns: new[] { "HorarioId", "DiaSemana", "Estado", "Fecha", "HoraFin", "HoraInicio" },
                 values: new object[,]
@@ -167,51 +176,56 @@ namespace FBQ.Salud_AccessData.Migrations
             migrationBuilder.InsertData(
                 table: "TipoEmpleados",
                 columns: new[] { "TipoEmpleadoId", "Descripcion", "Estado" },
-                values: new object[] { 1, "Enfermera", true });
+                values: new object[,]
+                {
+                    { 1, "Enfermera", true },
+                    { 2, "Medico", true }
+                });
 
             migrationBuilder.InsertData(
                 table: "Empleados",
                 columns: new[] { "EmpleadoId", "Apellido", "Clave", "DNI", "Estado", "Foto", "HorarioId", "Nombre", "TipoEmpleadoId", "Usuario" },
-                values: new object[] { 1, "Mcree", "42205969Messi", "201412521", true, "foto.jpg", 1, "Mauricio", 1, "alamenda204" });
-
-            migrationBuilder.InsertData(
-                table: "Empleados",
-                columns: new[] { "EmpleadoId", "Apellido", "Clave", "DNI", "Estado", "Foto", "HorarioId", "Nombre", "TipoEmpleadoId", "Usuario" },
-                values: new object[] { 2, "Magno", "42205969Messi", "201412522", true, "foto.jpg", 2, "Alejandro", 1, "alamenda209" });
-
-            migrationBuilder.InsertData(
-                table: "Empleados",
-                columns: new[] { "EmpleadoId", "Apellido", "Clave", "DNI", "Estado", "Foto", "HorarioId", "Nombre", "TipoEmpleadoId", "Usuario" },
-                values: new object[] { 3, "Tentaculos", "42205969Messi", "201412526", true, "foto.jpg", 3, "Calamardo", 1, "Calamenda609" });
+                values: new object[,]
+                {
+                    { 1, "Mcree", "42205969Messi", "201412521", true, "foto.jpg", 1, "Mauricio", 1, "alamenda204" },
+                    { 2, "Magno", "42205969Messi", "201412522", true, "foto.jpg", 2, "Alejandro", 1, "alamenda209" },
+                    { 3, "Tentaculos", "42205969Messi", "201412526", true, "foto.jpg", 3, "Calamardo", 1, "Calamenda609" },
+                    { 9, "Tentaculos", "42205969essi", "201412521", true, "foto.jpg", 3, "Calamardo", 2, "Calamenda629" },
+                    { 10, "Tentaculos", "42205969Messi", "201412526", true, "foto.jpg", 3, "Calamardo", 2, "Calamenda609" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Enfermeras",
                 columns: new[] { "EnfermeraId", "EmpleadoId", "Estado", "HorarioId", "TipoEnfermera" },
-                values: new object[] { 1, 1, true, 1, "MultiFuncion" });
+                values: new object[,]
+                {
+                    { 1, 1, true, 1, "MultiFuncion" },
+                    { 2, 2, true, 2, "Limpiador" },
+                    { 3, 3, true, 3, "MultiFuncion" }
+                });
 
             migrationBuilder.InsertData(
-                table: "Enfermeras",
-                columns: new[] { "EnfermeraId", "EmpleadoId", "Estado", "HorarioId", "TipoEnfermera" },
-                values: new object[] { 2, 2, true, 2, "Limpiador" });
-
-            migrationBuilder.InsertData(
-                table: "Enfermeras",
-                columns: new[] { "EnfermeraId", "EmpleadoId", "Estado", "HorarioId", "TipoEnfermera" },
-                values: new object[] { 3, 3, true, 3, "MultiFuncion" });
+                table: "Medicos",
+                columns: new[] { "MedicoId", "EmpleadoId", "EspecialidadId", "Estado", "HorarioId" },
+                values: new object[,]
+                {
+                    { 1, 9, 1, true, 1 },
+                    { 2, 10, 2, true, 1 }
+                });
 
             migrationBuilder.InsertData(
                 table: "Habitaciones",
                 columns: new[] { "HabitacionId", "EnfermeraId", "Estado", "Fecha", "Numero", "PacienteId", "Piso" },
                 values: new object[,]
                 {
-                    { 1, 1, true, new DateTime(2022, 11, 28, 15, 14, 4, 347, DateTimeKind.Local).AddTicks(5469), 204, 1, 1 },
-                    { 2, 1, true, new DateTime(2022, 11, 28, 15, 14, 4, 347, DateTimeKind.Local).AddTicks(5525), 205, 2, 1 },
-                    { 3, 1, true, new DateTime(2022, 11, 28, 15, 14, 4, 347, DateTimeKind.Local).AddTicks(5527), 206, 3, 1 },
-                    { 4, 1, true, new DateTime(2022, 11, 28, 15, 14, 4, 347, DateTimeKind.Local).AddTicks(5528), 207, 4, 1 },
-                    { 5, 2, true, new DateTime(2022, 11, 28, 15, 14, 4, 347, DateTimeKind.Local).AddTicks(5529), 208, 5, 1 },
-                    { 6, 2, true, new DateTime(2022, 11, 28, 15, 14, 4, 347, DateTimeKind.Local).AddTicks(5530), 209, 6, 1 },
-                    { 7, 3, true, new DateTime(2022, 11, 28, 15, 14, 4, 347, DateTimeKind.Local).AddTicks(5531), 210, 7, 1 },
-                    { 8, 3, true, new DateTime(2022, 11, 28, 15, 14, 4, 347, DateTimeKind.Local).AddTicks(5532), 211, 8, 1 }
+                    { 1, 1, true, new DateTime(2024, 12, 7, 20, 54, 26, 556, DateTimeKind.Local).AddTicks(3052), 204, 1, 1 },
+                    { 2, 1, true, new DateTime(2024, 12, 7, 20, 54, 26, 556, DateTimeKind.Local).AddTicks(3062), 205, 2, 1 },
+                    { 3, 1, true, new DateTime(2024, 12, 7, 20, 54, 26, 556, DateTimeKind.Local).AddTicks(3063), 206, 3, 1 },
+                    { 4, 1, true, new DateTime(2024, 12, 7, 20, 54, 26, 556, DateTimeKind.Local).AddTicks(3064), 207, 4, 1 },
+                    { 5, 2, true, new DateTime(2024, 12, 7, 20, 54, 26, 556, DateTimeKind.Local).AddTicks(3065), 208, 5, 1 },
+                    { 6, 2, true, new DateTime(2024, 12, 7, 20, 54, 26, 556, DateTimeKind.Local).AddTicks(3066), 209, 6, 1 },
+                    { 7, 3, true, new DateTime(2024, 12, 7, 20, 54, 26, 556, DateTimeKind.Local).AddTicks(3067), 210, 7, 1 },
+                    { 8, 3, true, new DateTime(2024, 12, 7, 20, 54, 26, 556, DateTimeKind.Local).AddTicks(3068), 211, 8, 1 }
                 });
 
             migrationBuilder.CreateIndex(

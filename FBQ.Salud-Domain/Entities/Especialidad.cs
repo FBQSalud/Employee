@@ -6,7 +6,7 @@ namespace FBQ.Salud_Domain.Entities
     public class Especialidad
     {
         [Key]
-        public int EspecilalidadId { get; set; }
+        public int EspecialidadId { get; set; }
         [Required]
         public string Descripcion { get; set; } 
     }
